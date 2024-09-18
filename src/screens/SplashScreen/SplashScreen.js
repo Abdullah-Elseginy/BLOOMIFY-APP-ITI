@@ -26,7 +26,7 @@ export default function SplashScreen() {
       }}>
       <ImageBackground
         source={IMAGES.BLoomyLogo}
-        style={{width: wp(20), height: hp(20)}}></ImageBackground>
+        style={{width: wp(40), height: hp(20)}}></ImageBackground>
     </View>
   );
 }

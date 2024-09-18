@@ -1,15 +1,16 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react/no-unstable-nested-components */
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Image, Platform, StyleSheet, Text, View} from 'react-native';
+import {Platform, StyleSheet, Text, View} from 'react-native';
 import colors from '../constants/Constant';
-import {FONTS} from '../constants/Fonts';
-import IMAGES from '../constants/Images';
 import HomeScreen from '../screens/HomeScreen';
 import CartScreen from '../screens/CartScreen';
 import Profile from '../screens/ProfileScreen';
 import {hp, wp} from '../constants/Dimensions';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Constant from '../constants/Constant';
 const Tab = createBottomTabNavigator();
 
 const BottomTabNavigator = () => {
@@ -24,8 +25,10 @@ const BottomTabNavigator = () => {
                 style={[
                   styles.tabBarName,
                   {
-                    color: focused ? '#00f' : colors.colors['dark-brownish'],
-                    fontFamily: focused ? FONTS.SemiBold : FONTS.Regular,
+                    color: focused
+                      ? colors.colors['light-pink']
+                      : colors.colors['dusty-mauve'],
+                    fontWeight: focused ? 'bold' : '400',
                   },
                 ]}>
                 {route.name}
@@ -37,23 +40,47 @@ const BottomTabNavigator = () => {
           let Icon;
           if (route.name === 'Home') {
             Icon = focused ? (
-              <AntDesign color={'#000'} size={20} name={'home'} />
+              <AntDesign
+                color={colors.colors['light-pink']}
+                size={wp(5)}
+                name={'home'}
+              />
             ) : (
-              <AntDesign color={'#000'} size={20} name={'home'} />
+              <AntDesign
+                color={Constant.colors['dusty-mauve']}
+                size={wp(4.5)}
+                name={'home'}
+              />
             );
           }
           if (route.name === 'cart') {
             Icon = focused ? (
-              <AntDesign color={'#000'} size={20} name={'home'} />
+              <AntDesign
+                color={Constant.colors['light-pink']}
+                size={wp(5)}
+                name={'shoppingcart'}
+              />
             ) : (
-              <AntDesign color={'#000'} size={20} name={'home'} />
+              <AntDesign
+                color={Constant.colors['dusty-mauve']}
+                size={wp(4.5)}
+                name={'shoppingcart'}
+              />
             );
           }
           if (route.name === 'Profile') {
             Icon = focused ? (
-              <AntDesign color={'#000'} size={20} name={'home'} />
+              <Ionicons
+                color={colors.colors['light-pink']}
+                size={wp(5)}
+                name={'person-circle-outline'}
+              />
             ) : (
-              <AntDesign color={'#000'} size={20} name={'home'} />
+              <Ionicons
+                color={colors.colors['dusty-mauve']}
+                size={wp(4.5)}
+                name={'person-circle-outline'}
+              />
             );
           }
 
@@ -78,8 +105,8 @@ const styles = StyleSheet.create({
     height: Platform.OS === 'ios' ? hp(12.5) : hp(9),
     width: wp('100%'),
     borderWidth: 1,
-    backgroundColor: colors.colors['light-pink'],
-    borderTopWidth: 0.1,
+    backgroundColor: colors.colors['deep-burgundy'],
+    borderTopWidth: wp(0.2),
     borderTopColor: colors.colors['dusty-mauve'],
     paddingTop: Platform.OS === 'ios' ? hp(2) : hp(1.5),
     shadowOffset: {

@@ -5,6 +5,10 @@ export default {
     'dusty-mauve': '#AE6B77',
     'light-pink': '#F3C0C7',
     'pale-grayish': '#E8E1DA',
+    white: '#FFFFFF',
+    'light-grayish': '#F2F2F2',
+    'light-brownish-gray': '#B39C8D',
+    gray: '#ccc',
   },
 
   mainButton: {

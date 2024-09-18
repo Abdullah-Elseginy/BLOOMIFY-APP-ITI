@@ -1,6 +1,6 @@
 const IMAGES = {
   HomeSVG: require('../assets/svg/home.svg'),
-  BLoomyLogo: require('../assets/images/bloomifyBG.jpg'),
+  BLoomyLogo: require('../assets/images/logo.png'),
   LoginPng: require('../assets/images/login.png'),
   RegisterImg: require('../assets/images/register.png'),
   Intro1: require('../assets/images/introo1.png'),
