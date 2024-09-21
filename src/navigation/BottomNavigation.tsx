@@ -10,7 +10,9 @@ import Profile from '../screens/ProfileScreen';
 import {hp, wp} from '../constants/Dimensions';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Feather from 'react-native-vector-icons/Feather';
 import Constant from '../constants/Constant';
+import Shop from '../screens/Shop/Shop';
 const Tab = createBottomTabNavigator();
 
 const BottomTabNavigator = () => {
@@ -83,13 +85,28 @@ const BottomTabNavigator = () => {
               />
             );
           }
-
+          if (route.name === 'Shop') {
+            Icon = focused ? (
+              <Feather
+                color={colors.colors['light-pink']}
+                size={wp(5)}
+                name={'shopping-bag'}
+              />
+            ) : (
+              <Feather
+                color={colors.colors['dusty-mauve']}
+                size={wp(4.5)}
+                name={'shopping-bag'}
+              />
+            );
+          }
           return Icon;
         },
         headerShown: false,
         tabBarStyle: [styles.tapStyles],
       })}>
       <Tab.Screen name={'Home'} component={HomeScreen} />
+      <Tab.Screen name={'Shop'} component={Shop} />
       <Tab.Screen name={'cart'} component={CartScreen} />
       <Tab.Screen name={'Profile'} component={Profile} />
     </Tab.Navigator>

@@ -7,5 +7,14 @@ const IMAGES = {
   Intro2: require('../assets/images/introo2.png'),
   Intro3: require('../assets/images/introo3.png'),
   Intro4: require('../assets/images/introo4.png'),
+  Mothers: require('../assets/images/mother.png'),
+  Wedding: require('../assets/images/wedding.png'),
+  Graduation: require('../assets/images/Graduation.png'),
+  Birthday: require('../assets/images/Birthday.png'),
+  flower1: require('../assets/images/flower1.png'),
+  flower2: require('../assets/images/flower2.png'),
+  flower3: require('../assets/images/flower3.png'),
+  flower5: require('../assets/images/flower5.png'),
+  flower4: require('../assets/images/flower4.png'),
 };
 export default IMAGES;
