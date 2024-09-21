@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1008601956624",
+    "project_id": "bouquet-project-data",
+    "storage_bucket": "bouquet-project-data.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1008601956624:android:de6d1c23a6197fbf566595",
+        "android_client_info": {
+          "package_name": "com.bloomify"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBYVsg9W2GgQkpElujGf8yaMl33S5Gf2FU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
