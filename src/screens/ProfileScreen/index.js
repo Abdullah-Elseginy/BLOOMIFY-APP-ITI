@@ -1,10 +1,11 @@
 import {View, Text} from 'react-native';
 import React from 'react';
+import AppHeader from '../../Components/Header';
 
 const Profile = () => {
   return (
     <View>
-      <Text style={{color: '#0dd'}}>Profile</Text>
+      <AppHeader title={'Welcome Abdullah'} />
     </View>
   );
 };

@@ -1,8 +1,13 @@
 import React from 'react';
-import {Text} from 'react-native';
+import {Text, View} from 'react-native';
+import AppHeader from '../../Components/Header';
 
 const CartScreen = () => {
-  return <Text>CArt</Text>;
+  return (
+    <View>
+      <AppHeader title={'Your Cart'} />
+    </View>
+  );
 };
 
 export default CartScreen;

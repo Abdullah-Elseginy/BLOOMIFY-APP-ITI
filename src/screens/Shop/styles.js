@@ -2,7 +2,7 @@
 // export const style = StyleSheet.create({});
 
 import {StyleSheet} from 'react-native';
-import { hp, wp } from '../../constants/Dimensions';
+import {hp, wp} from '../../constants/Dimensions';
 import Constant from '../../constants/Constant';
 export const styles = StyleSheet.create({
   container: {
@@ -21,11 +21,11 @@ export const styles = StyleSheet.create({
     paddingBottom: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth:wp(0.1),
-    borderColor:Constant.colors['dusty-mauve']
+    borderWidth: wp(0.1),
+    borderColor: Constant.colors['light-pink'],
   },
   productImage: {
-    width:'100%',
+    width: '100%',
     height: hp(20),
     borderRadius: wp(2),
   },
@@ -34,21 +34,22 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 10,
     textAlign: 'center',
+    color: Constant.colors['deep-burgundy'],
   },
   productPrice: {
     fontSize: 14,
     color: 'gray',
     marginTop: 5,
-    fontWeight:'800'
+    fontWeight: '800',
   },
   addButton: {
     backgroundColor: '#4C1B1B',
     padding: 10,
     borderRadius: wp(2),
     marginTop: 10,
-    width:wp(40),
-    justifyContent:'center',
-    alignItems:'center'
+    width: wp(40),
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   addButtonText: {
     color: '#fff',

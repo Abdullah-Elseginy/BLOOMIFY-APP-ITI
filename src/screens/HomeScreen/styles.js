@@ -1,3 +1,125 @@
 import {StyleSheet} from 'react-native';
+import {hp, wp} from '../../constants/Dimensions';
+import Constant from '../../constants/Constant';
 
-export const style = StyleSheet.create({});
+// Updated styles
+export const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Constant.colors.white,
+    padding: wp(2),
+  },
+  sectionHeader: {
+    marginTop: hp(2),
+    paddingLeft: wp(2),
+  },
+  sectionTitle: {
+    color: Constant.colors['deep-burgundy'],
+    fontWeight: 'bold',
+    fontSize: wp(4.5),
+  },
+  carouselItem: {
+    borderWidth: wp(0.12),
+    height: hp(30),
+    marginTop: hp(2),
+    marginLeft: wp(2.2),
+    width: wp(92.2),
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: hp(2),
+    borderColor: Constant.colors['light-pink'],
+    borderRadius: wp(2),
+  },
+  carouselImage: {
+    width: wp(50),
+    height: hp(18),
+  },
+  carouselTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: hp(2),
+    color: Constant.colors['deep-burgundy'],
+  },
+  carouselDescription: {
+    fontSize: 14,
+    marginTop: hp(1),
+    textAlign: 'center',
+    color: Constant.colors['deep-burgundy'],
+  },
+  categoryItem: {
+    backgroundColor: Constant.colors.white,
+    shadowColor: Constant.colors['gray'],
+    width: wp(30),
+    elevation: 5,
+    marginTop: hp(2),
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: wp(2),
+    marginBottom: hp(1),
+    padding: hp(1),
+    height: hp(12),
+    borderRadius: wp(2),
+    borderWidth: wp(0.1),
+    borderColor: Constant.colors['light-pink'],
+  },
+  categoryImage: {
+    width: wp(10),
+    height: hp(8),
+  },
+  categoryTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginTop: hp(1),
+    color: Constant.colors['deep-burgundy'],
+  },
+  bestSellerItem: {
+    backgroundColor: Constant.colors.white,
+    shadowColor: Constant.colors['gray'],
+    width: wp(75),
+    elevation: 5,
+    marginTop: hp(2),
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: wp(2),
+    marginBottom: hp(1),
+    padding: wp(2),
+    borderRadius: wp(2),
+    borderWidth: wp(0.1),
+    borderColor: Constant.colors['light-pink'],
+  },
+  bestSellerImage: {
+    width: wp(60),
+    height: hp(18),
+  },
+  bestSellerTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: hp(1.5),
+    color: Constant.colors['deep-burgundy'],
+  },
+  recommendedItem: {
+    backgroundColor: Constant.colors.white,
+    shadowColor: Constant.colors['gray'],
+    width: wp(75),
+    elevation: 5,
+    marginTop: hp(2),
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: wp(2),
+    marginBottom: hp(1),
+    padding: wp(2),
+    borderRadius: wp(2),
+    borderWidth: wp(0.1),
+    borderColor: Constant.colors['light-pink'],
+  },
+  recommendedImage: {
+    width: wp(60),
+    height: hp(18),
+  },
+  recommendedTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: hp(1.5),
+    color: Constant.colors['deep-burgundy'],
+  },
+});

@@ -18,6 +18,7 @@ import {
 } from 'firebase/firestore';
 import {db} from '../../firebase/firebase';
 import {styles} from './styles';
+import AppHeader from '../../Components/Header';
 
 export default function Shop() {
   const [products, setProducts] = useState([]);
@@ -102,29 +103,32 @@ export default function Shop() {
   );
 
   return (
-    <View style={styles.container}>
-      {loading && products.length === 0 ? (
-        <View style={styles.activity}>
-          <ActivityIndicator size="large" color="#AE6B77" />
-        </View>
-      ) : (
-        <FlatList
-          data={products}
-          renderItem={renderItem}
-          keyExtractor={item => item.id.toString()}
-          numColumns={2}
-          columnWrapperStyle={styles.row}
-          onEndReached={loadMore} // Load more when the end is reached
-          onEndReachedThreshold={0.5} // Trigger loadMore at 50% of the screen height before reaching the end
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
-          ListFooterComponent={
-            loadingMore && <ActivityIndicator size="small" color="#AE6B77" />
-          }
-        />
-      )}
-    </View>
+    <>
+      <AppHeader title={'Shop Now '} />
+      <View style={styles.container}>
+        {loading && products.length === 0 ? (
+          <View style={styles.activity}>
+            <ActivityIndicator size="large" color="#AE6B77" />
+          </View>
+        ) : (
+          <FlatList
+            data={products}
+            renderItem={renderItem}
+            keyExtractor={item => item.id.toString()}
+            numColumns={2}
+            columnWrapperStyle={styles.row}
+            onEndReached={loadMore} // Load more when the end is reached
+            onEndReachedThreshold={0.5} // Trigger loadMore at 50% of the screen height before reaching the end
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+            ListFooterComponent={
+              loadingMore && <ActivityIndicator size="small" color="#AE6B77" />
+            }
+          />
+        )}
+      </View>
+    </>
   );
 }
 
