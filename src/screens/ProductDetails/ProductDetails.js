@@ -9,6 +9,7 @@ import { Image } from 'react-native';
 import { hp } from '../../constants/Dimensions';
 import Constant from '../../constants/Constant';
 import { Rating } from 'react-native-ratings';
+import AppHeader from '../../Components/Header';
 
 export default function ProductDetails() {
     const { params } = useRoute();
@@ -52,6 +53,8 @@ export default function ProductDetails() {
     }, [reviews]);
 
     return (
+        <>
+        <AppHeader title={product.name} arrowBack={true}/>
         <View style={styles.container}>
             {loading || !product.image ? (
                 <View style={styles.activity}>
@@ -117,5 +120,6 @@ export default function ProductDetails() {
                 </>)
             }
         </View>
+        </>
     )
 }
