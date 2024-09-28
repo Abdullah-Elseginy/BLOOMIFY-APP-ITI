@@ -6,7 +6,6 @@ import {
   FlatList,
   TouchableOpacity,
   ActivityIndicator,
-  StyleSheet,
   RefreshControl,
 } from 'react-native';
 import {
@@ -18,6 +17,7 @@ import {
 } from 'firebase/firestore';
 import {db} from '../../firebase/firebase';
 import {styles} from './styles';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Shop() {
   const [products, setProducts] = useState([]);
@@ -88,17 +88,19 @@ export default function Shop() {
     fetchData();
   }, []);
 
+  const {navigate} = useNavigation();
+
   const renderItem = ({item}) => (
-    <View style={styles.productContainer}>
-      <Image source={{uri: item.image}} style={styles.productImage} />
-      <Text style={styles.productName}>
-        {item.name.length > 18 ? item.name.slice(0, 18) + '...' : item.name}
-      </Text>
-      <Text style={styles.productPrice}>{item.price} EGP</Text>
+    <TouchableOpacity style={styles.productContainer} activeOpacity={0.7} onPress={()=>navigate('productDetails',item.id)}>
+          <Image source={{uri: item.image}} style={styles.productImage} />
+          <Text style={styles.productName}>
+            {item.name.length > 18 ? item.name.slice(0, 18) + '...' : item.name}
+          </Text>
+          <Text style={styles.productPrice}>{item.price} EGP</Text>
       <TouchableOpacity style={styles.addButton}>
         <Text style={styles.addButtonText}>Add to Cart</Text>
       </TouchableOpacity>
-    </View>
+    </TouchableOpacity>
   );
 
   return (

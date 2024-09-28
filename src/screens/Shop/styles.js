@@ -24,6 +24,11 @@ export const styles = StyleSheet.create({
     borderWidth:wp(0.1),
     borderColor:Constant.colors['dusty-mauve']
   },
+  headerOfView:{
+    width:wp(45),
+    justifyContent:'flex-start',
+    alignItems:'center',
+  },
   productImage: {
     width:'100%',
     height: hp(20),
