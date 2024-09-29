@@ -7,6 +7,8 @@ import SignIn from '../screens/SignIn/SignIn';
 import Register from '../screens/Signup/SignUp';
 import Introo from '../screens/Introo/Introo';
 import ProductDetails from '../screens/ProductDetails/ProductDetails';
+import CartScreen from '../screens/CartScreen';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -22,6 +24,7 @@ const MainStack = () => {
         <Stack.Screen name={'Signup'} component={Register} />
         <Stack.Screen name={'Introo'} component={Introo} />
         <Stack.Screen name={'productDetails'} component={ProductDetails} />
+        <Stack.Screen name={'cartScreen'} component={CartScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -7,6 +7,8 @@ import {PersistGate} from 'redux-persist/integration/react';
 import MainStack from './src/navigation/MainStack';
 import {persistor, store} from './src/redux/store';
 import Constant from './src/constants/Constant';
+import Toast from 'react-native-toast-message';
+
 
 function App(): React.JSX.Element {
   return (
@@ -18,6 +20,7 @@ function App(): React.JSX.Element {
             backgroundColor={Constant.colors['deep-burgundy']}
           />
           <MainStack />
+          <Toast/>
         </GestureHandlerRootView>
       </PersistGate>
     </Provider>

@@ -10,12 +10,21 @@ import { hp } from '../../constants/Dimensions';
 import Constant from '../../constants/Constant';
 import { Rating } from 'react-native-ratings';
 import AppHeader from '../../Components/Header';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToCart } from '../../redux/slices/cartSlice';
+import toast from 'react-native-toast-message';
+
 
 export default function ProductDetails() {
     const { params } = useRoute();
     const [product, setProduct] = useState({});
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(false);
+
+
+    const dispatch = useDispatch();
+    const cartItems = useSelector((state) => state.cart);
+
 
     useEffect(() => {
         const getProductData = async () => {
@@ -51,6 +60,15 @@ export default function ProductDetails() {
             }));
         }
     }, [reviews]);
+
+
+    const addCart = (item) => {
+        dispatch(addToCart(item)); 
+        toast.show({ type: 'success', text1: `${item.name} added to cart ` });
+    };
+
+    const isInCart = cartItems.some(cartItem => cartItem.id === product.id);
+
 
     return (
         <>
@@ -95,9 +113,18 @@ export default function ProductDetails() {
                                 <Text style={styles.title}>Description</Text>
                                 <Text style={[styles.boxText, { lineHeight: 20 }]}>{product.description}</Text>
                             </View>
-                            <TouchableOpacity activeOpacity={0.7} style={styles.addButton}>
+
+                            {/* <TouchableOpacity activeOpacity={0.7} style={styles.addButton}>
                                 <Text style={styles.addButtonText}>Add to Cart</Text>
+                            </TouchableOpacity> */}
+                            <TouchableOpacity style={[styles.addButton,isInCart && { opacity: 0.5 }]} key={product.id}
+                            onPress={() => !isInCart && addCart(product)} 
+                            activeOpacity={isInCart ? 1 : 0.7} >
+                            <Text style={styles.addButtonText}>
+                            {isInCart ? 'Added to Cart' : 'Add to Cart'}
+                            </Text>
                             </TouchableOpacity>
+
                             <View style={styles.comment}>
                                 <Text style={styles.title}>Reviews</Text>
                                 {reviews.map((item) => <View key={item.id} style={styles.commentContainer}>

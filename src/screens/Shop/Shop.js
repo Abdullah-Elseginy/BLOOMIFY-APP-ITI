@@ -19,6 +19,9 @@ import {db} from '../../firebase/firebase';
 import {styles} from './styles';
 import AppHeader from '../../Components/Header';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToCart } from '../../redux/slices/cartSlice';
+import toast from 'react-native-toast-message';
 
 export default function Shop() {
   const [products, setProducts] = useState([]);
@@ -26,6 +29,10 @@ export default function Shop() {
   const [lastVisible, setLastVisible] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
+
+
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart);
 
   const fetchData = async (isRefresh = false) => {
     setLoading(true);
@@ -91,19 +98,37 @@ export default function Shop() {
 
   const {navigate} = useNavigation();
 
-  const renderItem = ({item}) => (
-    <TouchableOpacity style={styles.productContainer} activeOpacity={0.7} onPress={()=>navigate('productDetails',item.id)}>
+  const addCart = (item) => {
+    dispatch(addToCart(item)); 
+    toast.show({ type: 'success', text1:` ${item.name} added to cart `});
+  };
+
+  const renderItem = ({item}) => {
+
+    const isInCart = cartItems.some(cartItem => cartItem.id === item.id);
+
+    return (
+    <TouchableOpacity key={item.id} style={styles.productContainer} activeOpacity={0.7} onPress={()=>navigate('productDetails',item.id)}>
           <Image source={{uri: item.image}} style={styles.productImage} />
           <Text style={styles.productName}>
             {item.name.length > 18 ? item.name.slice(0, 18) + '...' : item.name}
           </Text>
           <Text style={styles.productPrice}>{item.price} EGP</Text>
-      <TouchableOpacity style={styles.addButton}>
-        <Text style={styles.addButtonText}>Add to Cart</Text>
+          <TouchableOpacity
+        style={[
+          styles.addButton,
+          isInCart && { opacity: 0.5 } 
+        ]}
+        onPress={() => !isInCart && addCart(item)} 
+        activeOpacity={isInCart ? 1 : 0.7} 
+      >
+        <Text style={styles.addButtonText}>
+          {isInCart ? 'Added to Cart' : 'Add to Cart'}
+        </Text>
       </TouchableOpacity>
     </TouchableOpacity>
   );
-
+};
   return (
     <>
       <AppHeader title={'Shop Now '} />
