@@ -8,19 +8,25 @@ import {
   Image,
   ScrollView,
   StyleSheet,
+  Alert
 } from 'react-native';
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
 import constant from '../../constants/Constant';
 import {hp, wp} from '../../constants/Dimensions';
 import IMAGES from '../../constants/Images';
-
+import {auth, db} from '../../firebase/firebase';
+import {createUserWithEmailAndPassword} from 'firebase/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {setDoc, doc} from 'firebase/firestore';
+import * as Animatable from 'react-native-animatable';
 export default function Register({navigation}) {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const phoneRegExp = /^(010|011|012|015)\d{8}$/;
 
+  // Form Validation Schema using Yup
   const validationSchema = Yup.object({
     name: Yup.string()
       .min(3, 'Name minLength is 3')
@@ -48,12 +54,43 @@ export default function Register({navigation}) {
       rePassword: '',
     },
     validationSchema,
-    onSubmit: values => {
+    onSubmit: async values => {
       setIsLoading(true);
-      setError(null);
-      setTimeout(() => {
+      setError(null); // Clear any previous errors
+
+      try {
+        // Create user with Firebase Auth
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          values.email,
+          values.password,
+        );
+ 
+        await setDoc(doc(db, 'users', userCredential.user.uid), {
+          name: values.name,
+          phone: values.phone,
+          email: values.email,
+          password: values.password,
+        });
+
+        const user = userCredential.user;
+        console.log('User created:', user);
+  
+        await AsyncStorage.setItem('userToken', user.accessToken);
+
+        await AsyncStorage.setItem('userData', JSON.stringify(values));
+        navigation.replace('BottomTabs');
+      // eslint-disable-next-line no-catch-shadow
+      } catch (error) {
+        setError(error.message || 'Registration failed. Please try again.');
+        Alert.alert(
+          'Register Failed',
+            'Please check your credentials and try again.',
+        );
+        // console.error('Error creating user:', error);
+      } finally {
         setIsLoading(false);
-      }, 2000);
+      }
     },
   });
 
@@ -66,17 +103,13 @@ export default function Register({navigation}) {
           alignItems: 'center',
           backgroundColor: constant.colors['pale-grayish'],
         }}>
-        <Image
+        <Animatable.Image animation="zoomInDown"
           source={IMAGES.RegisterImg}
           resizeMode="contain"
           style={{width: wp(80), height: hp(45)}}
         />
 
-        <View
-          style={{
-            width: '100%',
-            padding: 16,
-          }}>
+        <View style={{width: '100%', padding: 16}}>
           <Text
             style={{
               fontSize: 24,
@@ -88,24 +121,27 @@ export default function Register({navigation}) {
             Register Now
           </Text>
 
-          {error && <Text style={{color: 'red', width: wp(80)}}>{error}</Text>}
+          {error && <Text style={{color: 'red', width: wp(80)}}>Please try again , this account is used before</Text>}
 
           <TextInput
             style={styles.input}
             placeholder="Enter your name"
+            placeholderTextColor={constant.colors['dark-brownish']}
             value={formik.values.name}
             onChangeText={formik.handleChange('name')}
             onBlur={formik.handleBlur('name')}
           />
           {formik.touched.name && formik.errors.name ? (
             <Text style={{color: 'red', width: wp(80)}}>
-              {formik.errors.name}
+              {/* {formik.errors.name} */}
+              Please try again , this account is used before
             </Text>
           ) : null}
 
           <TextInput
             style={styles.input}
             placeholder="Enter your phone number"
+            placeholderTextColor={constant.colors['dark-brownish']}
             value={formik.values.phone}
             onChangeText={formik.handleChange('phone')}
             onBlur={formik.handleBlur('phone')}
@@ -120,6 +156,7 @@ export default function Register({navigation}) {
           <TextInput
             style={styles.input}
             placeholder="Enter your email"
+            placeholderTextColor={constant.colors['dark-brownish']}
             value={formik.values.email}
             onChangeText={formik.handleChange('email')}
             onBlur={formik.handleBlur('email')}
@@ -134,6 +171,7 @@ export default function Register({navigation}) {
           <TextInput
             style={styles.input}
             placeholder="Enter your password"
+            placeholderTextColor={constant.colors['dark-brownish']}
             value={formik.values.password}
             onChangeText={formik.handleChange('password')}
             onBlur={formik.handleBlur('password')}
@@ -148,6 +186,7 @@ export default function Register({navigation}) {
           <TextInput
             style={styles.input}
             placeholder="Confirm password"
+            placeholderTextColor={constant.colors['dark-brownish']}
             value={formik.values.rePassword}
             onChangeText={formik.handleChange('rePassword')}
             onBlur={formik.handleBlur('rePassword')}
@@ -161,8 +200,11 @@ export default function Register({navigation}) {
 
           <TouchableOpacity
             style={[constant.mainButton, {alignSelf: 'center'}]}
-            onPress={formik.handleSubmit}
-            disabled={isLoading}>
+            onPress={() => {
+              formik.handleSubmit();
+              console.log(error);
+            }}
+            disabled={isLoading || !formik.isValid}>
             <Text style={styles.submitButtonText}>
               {isLoading ? 'Loading...' : 'Register'}
             </Text>
@@ -205,17 +247,6 @@ const styles = StyleSheet.create({
     padding: hp(1),
     borderRadius: 10,
     marginVertical: hp(1),
-  },
-  errorText: {
-    color: 'red',
-    fontSize: 12,
-    marginBottom: 5,
-  },
-  submitButton: {
-    backgroundColor: '#800020',
-    padding: 12,
-    borderRadius: 8,
-    alignItems: 'center',
   },
   submitButtonText: {
     color: '#fff',

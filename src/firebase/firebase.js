@@ -1,8 +1,13 @@
 import { initializeApp } from "firebase/app";
+import { 
+  getAuth, 
+  initializeAuth, 
+  getReactNativePersistence 
+} from 'firebase/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getFirestore } from "firebase/firestore";
-//import { getAuth } from 'firebase/auth';
 
-
+// Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyAas5i2BaLdvIR9--bZGQTcNERY1Lo8uFY",
   authDomain: "bouquet-project-data.firebaseapp.com",
@@ -12,8 +17,15 @@ const firebaseConfig = {
   appId: "1:1008601956624:web:7651e2d37e3226a4566595"
 };
 
+// Initialize Firebase app
 const app = initializeApp(firebaseConfig);
-// const auth=getAuth(app);
-const db =getFirestore(app);
-// export {auth, db};
-export { db};
+
+// Initialize Firestore
+const db = getFirestore(app);
+
+// Initialize Auth with AsyncStorage for session persistence
+const auth = initializeAuth(app, {
+  persistence: getReactNativePersistence(AsyncStorage)
+});
+
+export { auth, db };

@@ -15,6 +15,7 @@ const IMAGES = {
   flower2: require('../assets/images/flower2.png'),
   flower3: require('../assets/images/flower3.png'),
   flower5: require('../assets/images/flower5.png'),
+splash:require('../assets/images/logo.png'),
   flower4: require('../assets/images/flower4.png'),
 };
 export default IMAGES;

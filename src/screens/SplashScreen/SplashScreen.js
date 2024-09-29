@@ -7,26 +7,27 @@ import {View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import IMAGES from '../../constants/Images';
 import {hp, wp} from '../../constants/Dimensions';
+import * as Animatable from 'react-native-animatable';
+import Constant from '../../constants/Constant';
 export default function SplashScreen() {
   const navigation = useNavigation();
   useEffect(() => {
-    // Simulate loading or authentication delay
     setTimeout(() => {
-      navigation.navigate('Introo');
-    }, 2000); // Adjust the duration as needed
+      navigation.replace('Introo');
+    }, 2000);
   }, [navigation]);
   return (
-    // <Splash/>
 
     <View
       style={{
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor:Constant.colors['pale-grayish']
       }}>
-      <ImageBackground
-        source={IMAGES.BLoomyLogo}
-        style={{width: wp(40), height: hp(20)}}></ImageBackground>
+      <Animatable.Image animation="flipInY" duration={4000}
+        source={IMAGES.splash} resizeMode='contain'
+        style={{width: wp(60), height: hp(40)}}></Animatable.Image>
     </View>
   );
 }

@@ -12,13 +12,14 @@ export default {
   },
 
   mainButton: {
-    width: '40%',
-    height: 40,
+    width: '50%',
+    height: 44,
     borderBottomLeftRadius: 35,
     borderTopRightRadius: 35,
     backgroundColor: '#4C1B1B',
     alignItems: 'center',
     justifyContent: 'center',
+    // margin: 20,
   },
   mainButtonText: {
     color: '#E8E1DA',
