@@ -6,6 +6,7 @@ import {wp} from '../../constants/Dimensions';
 import IMAGES from '../../constants/Images';
 import {styles} from './styles';
 import AppHeader from '../../Components/Header';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const CarousalData = [
   {
@@ -148,6 +149,24 @@ const HomeScreen = () => {
       setCurrentIndex(nextIndex);
     }
   };
+  const [storedData, setStoredData] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const value = await AsyncStorage.getItem('userToken');
+        if (value !== null) {
+          setStoredData(value); 
+          console.log(value) 
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    fetchData();  
+  }, []);
+
 
   return (
     <>
