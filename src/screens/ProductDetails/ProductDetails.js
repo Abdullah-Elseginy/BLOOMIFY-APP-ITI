@@ -2,7 +2,7 @@ import { View, Text, ActivityIndicator, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useRoute } from '@react-navigation/native'
 import { db } from '../../firebase/firebase';
-import { collection, getDoc, doc, onSnapshot } from 'firebase/firestore';
+import { collection, getDoc, doc, onSnapshot, setDoc } from 'firebase/firestore';
 import { styles } from './styles';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import { Image } from 'react-native';
@@ -11,8 +11,9 @@ import Constant from '../../constants/Constant';
 import { Rating } from 'react-native-ratings';
 import AppHeader from '../../Components/Header';
 import { useDispatch, useSelector } from 'react-redux';
-import { addToCart } from '../../redux/slices/cartSlice';
+import { addToCart, setCartItems } from '../../redux/slices/cartSlice';
 import toast from 'react-native-toast-message';
+import { getAuth } from 'firebase/auth'
 
 
 export default function ProductDetails() {
@@ -20,6 +21,11 @@ export default function ProductDetails() {
     const [product, setProduct] = useState({});
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(false);
+
+    const auth = getAuth();
+    const user = auth.currentUser;
+    const userId = user ? user.uid : null;
+
 
 
     const dispatch = useDispatch();
@@ -70,10 +76,47 @@ export default function ProductDetails() {
     const isInCart = cartItems.some(cartItem => cartItem.id === product.id);
 
 
+    useEffect(() => {
+        if (userId) {
+            const saveCartToFirebase = async () => {
+                try {
+                    const cartRef = doc(db, "carts", userId);
+                    await setDoc(cartRef, { items: cartItems });
+                } catch (error) {
+                    console.error("Error saving cart to Firebase:", error);
+                }
+            };
+
+            const debounceSave = setTimeout(() => saveCartToFirebase(), 1000);
+            return () => clearTimeout(debounceSave);
+        }
+    }, [cartItems, userId]);
+
+
+    useEffect(() => {
+        if (userId) {
+            const loadCartFromFirebase = async () => {
+                try {
+                    const cartRef = doc(db, "carts", userId);
+                    const cartDoc = await getDoc(cartRef);
+                    if (cartDoc.exists()) {
+                        const cartData = cartDoc.data();
+                        dispatch(setCartItems(cartData.items || []));
+                    }
+                } catch (error) {
+                    console.error("Error loading cart from Firebase:", error);
+                }
+            };
+
+            loadCartFromFirebase();
+        }
+    }, [dispatch, userId]);
+
+
     return (
         <>
         <AppHeader title={product.name} arrowBack={true}/>
-        <View style={styles.container}>
+        <View style={styles.container} key={product.id}>
             {loading || !product.image ? (
                 <View style={styles.activity}>
                     <ActivityIndicator size="large" color="#AE6B77" />
