@@ -15,7 +15,11 @@ const IMAGES = {
   flower2: require('../assets/images/flower2.png'),
   flower3: require('../assets/images/flower3.png'),
   flower5: require('../assets/images/flower5.png'),
-splash:require('../assets/images/logo.png'),
+  splash: require('../assets/images/logo.png'),
   flower4: require('../assets/images/flower4.png'),
+  VISa: require('../assets/images/Mastercard-Logo-PNG8.png'),
+  Paypal: require('../assets/images/PayPal.svg.png'),
+  Mastercard: require('../assets/images/Visa-Logo-PNG7.png'),
+  Success: require('../assets/images/check.png'),
 };
 export default IMAGES;

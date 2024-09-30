@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useRef, useState} from 'react';
 import {FlatList, Image, Text, View, ScrollView} from 'react-native';
@@ -156,17 +157,16 @@ const HomeScreen = () => {
       try {
         const value = await AsyncStorage.getItem('userToken');
         if (value !== null) {
-          setStoredData(value); 
-          console.log(value) 
+          setStoredData(value);
+          console.log('usertoken', value);
         }
       } catch (e) {
         console.error(e);
       }
     };
 
-    fetchData();  
+    fetchData();
   }, []);
-
 
   return (
     <>

@@ -42,62 +42,118 @@ const BottomTabNavigator = () => {
           let Icon;
           if (route.name === 'Home') {
             Icon = focused ? (
-              <AntDesign
-                color={colors.colors['light-pink']}
-                size={wp(5)}
-                name={'home'}
-              />
+              <View
+                style={{
+                  height: hp(4),
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <AntDesign
+                  color={colors.colors['light-pink']}
+                  size={wp(5)}
+                  name={'home'}
+                />
+              </View>
             ) : (
-              <AntDesign
-                color={Constant.colors['dusty-mauve']}
-                size={wp(4.5)}
-                name={'home'}
-              />
+              <View
+                style={{
+                  height: hp(4),
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <AntDesign
+                  color={Constant.colors['dusty-mauve']}
+                  size={wp(4.5)}
+                  name={'home'}
+                />
+              </View>
             );
           }
           if (route.name === 'cart') {
             Icon = focused ? (
-              <AntDesign
-                color={Constant.colors['light-pink']}
-                size={wp(5)}
-                name={'shoppingcart'}
-              />
+              <View
+                style={{
+                  height: hp(4),
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <AntDesign
+                  color={Constant.colors['light-pink']}
+                  size={wp(5)}
+                  name={'shoppingcart'}
+                />
+              </View>
             ) : (
-              <AntDesign
-                color={Constant.colors['dusty-mauve']}
-                size={wp(4.5)}
-                name={'shoppingcart'}
-              />
+              <View
+                style={{
+                  height: hp(4),
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <AntDesign
+                  color={Constant.colors['dusty-mauve']}
+                  size={wp(4.5)}
+                  name={'shoppingcart'}
+                />
+              </View>
             );
           }
           if (route.name === 'Profile') {
             Icon = focused ? (
-              <Ionicons
-                color={colors.colors['light-pink']}
-                size={wp(5)}
-                name={'person-circle-outline'}
-              />
+              <View
+                style={{
+                  height: hp(4),
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <Ionicons
+                  color={colors.colors['light-pink']}
+                  size={wp(5)}
+                  name={'person-circle-outline'}
+                />
+              </View>
             ) : (
-              <Ionicons
-                color={colors.colors['dusty-mauve']}
-                size={wp(4.5)}
-                name={'person-circle-outline'}
-              />
+              <View
+                style={{
+                  height: hp(4),
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <Ionicons
+                  color={colors.colors['dusty-mauve']}
+                  size={wp(4.5)}
+                  name={'person-circle-outline'}
+                />
+              </View>
             );
           }
           if (route.name === 'Shop') {
             Icon = focused ? (
-              <Feather
-                color={colors.colors['light-pink']}
-                size={wp(5)}
-                name={'shopping-bag'}
-              />
+              <View
+                style={{
+                  height: hp(4),
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <Feather
+                  color={colors.colors['light-pink']}
+                  size={wp(5)}
+                  name={'shopping-bag'}
+                />
+              </View>
             ) : (
-              <Feather
-                color={colors.colors['dusty-mauve']}
-                size={wp(4.5)}
-                name={'shopping-bag'}
-              />
+              <View
+                style={{
+                  height: hp(4),
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <Feather
+                  color={colors.colors['dusty-mauve']}
+                  size={wp(4.5)}
+                  name={'shopping-bag'}
+                />
+              </View>
             );
           }
           return Icon;
@@ -119,7 +175,7 @@ const styles = StyleSheet.create({
   tapStyles: {
     justifyContent: 'center',
     alignItems: 'center',
-    height: Platform.OS === 'ios' ? hp(12.5) : hp(9),
+    height: Platform.OS === 'ios' ? hp(12.5) : hp(8.5),
     width: wp('100%'),
     borderWidth: 1,
     backgroundColor: colors.colors['deep-burgundy'],
@@ -135,8 +191,8 @@ const styles = StyleSheet.create({
   },
   tabBarName: {
     fontSize: wp(3.5),
-    paddingTop: hp(1.5),
-    marginBottom: Platform.OS === 'ios' ? hp(0.8) : hp(1.5),
+    paddingTop: hp(0),
+    marginBottom: Platform.OS === 'ios' ? hp(0.8) : hp(1.2),
     textAlign: 'center',
     alignSelf: 'center',
   },

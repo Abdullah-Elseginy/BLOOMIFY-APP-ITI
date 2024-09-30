@@ -36,11 +36,11 @@ const CartScreen = () => {
         <Text style={styles.itemCategory}>Category: {item.category}</Text>
         <View style={styles.quantityContainer}>
           <TouchableOpacity onPress={() => handleDecrement(item.id)} style={styles.button}>
-            <Text>-</Text>
+            <Text style={styles.Plusminus}>-</Text>
           </TouchableOpacity>
           <Text style={styles.quantityText}>{item.quantity}</Text>
           <TouchableOpacity onPress={() => handleIncrement(item.id)} style={styles.button}>
-            <Text>+</Text>
+            <Text style={styles.Plusminus}>+</Text>
           </TouchableOpacity>
         </View>
         <Button title="Remove" onPress={() => handleRemove(item.id)} color="#4C1B1B" />

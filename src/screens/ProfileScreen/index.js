@@ -1,12 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import * as ImagePicker from 'react-native-image-picker';
-import { db } from '../../firebase/firebase'; // تأكد من مسار ملف الإعدادات الخاص بك
+import {db} from '../../firebase/firebase'; // تأكد من مسار ملف الإعدادات الخاص بك
+import AppHeader from '../../Components/Header';
 
-const ProfileScreen = ({ navigation }) => {
-  const [profileImage, setProfileImage] = useState('https://via.placeholder.com/150');
-  const [userData, setUserData] = useState({ name: '', email: '' });
+const ProfileScreen = ({navigation}) => {
+  const [profileImage, setProfileImage] = useState(
+    'https://via.placeholder.com/150',
+  );
+  const [userData, setUserData] = useState({name: '', email: ''});
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -15,7 +25,7 @@ const ProfileScreen = ({ navigation }) => {
         const userDoc = await db.collection('users').doc('user-id').get();
         if (userDoc.exists) {
           const user = userDoc.data();
-          setUserData({ name: user.name, email: user.email });
+          setUserData({name: user.name, email: user.email});
         }
       } catch (error) {
         console.log('Error fetching user data:', error);
@@ -26,7 +36,7 @@ const ProfileScreen = ({ navigation }) => {
   }, []);
 
   const handleImageChange = () => {
-    ImagePicker.launchImageLibrary({}, (response) => {
+    ImagePicker.launchImageLibrary({}, response => {
       if (response.assets) {
         setProfileImage(response.assets[0].uri);
       }
@@ -35,8 +45,8 @@ const ProfileScreen = ({ navigation }) => {
 
   const handleLogout = () => {
     Alert.alert('Logout', 'Are you sure you want to log out?', [
-      { text: 'Cancel', style: 'cancel' },
-      { text: 'Log Out', onPress: () => console.log('Logged Out') },
+      {text: 'Cancel', style: 'cancel'},
+      {text: 'Log Out', onPress: () => console.log('Logged Out')},
     ]);
   };
 
@@ -46,37 +56,55 @@ const ProfileScreen = ({ navigation }) => {
         <Icon name={iconName} size={24} color="#ffa500" style={styles.icon} />
       </View>
       <Text style={styles.optionText}>{text}</Text>
-      <Icon name="chevron-right" size={24} color="#ffa500" style={styles.arrowIcon} />
+      <Icon
+        name="chevron-right"
+        size={24}
+        color="#ffa500"
+        style={styles.arrowIcon}
+      />
     </TouchableOpacity>
   );
 
   return (
-    <View style={styles.container}>
-      {/* Profile Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={handleImageChange} style={styles.imageWrapper}>
-          <View style={styles.outerCircle}>
-            <View style={styles.innerCircle}>
-              <Image
-                source={{ uri: profileImage }}
-                style={styles.profileImage}
-              />
+    <>
+      <AppHeader title={`Welcome ${userData.name}`} />
+      <View style={styles.container}>
+        {/* Profile Header */}
+        <View style={styles.header}>
+          <TouchableOpacity
+            onPress={handleImageChange}
+            style={styles.imageWrapper}>
+            <View style={styles.outerCircle}>
+              <View style={styles.innerCircle}>
+                <Image
+                  source={{uri: profileImage}}
+                  style={styles.profileImage}
+                />
+              </View>
             </View>
-          </View>
-        </TouchableOpacity>
-        <Text style={styles.name}>{userData.name || 'Loading...'}</Text>
-        <Text style={styles.email}>{userData.email || 'Loading...'}</Text>
-      </View>
+          </TouchableOpacity>
+          <Text style={styles.name}>{userData.name || 'Loading...'}</Text>
+          <Text style={styles.email}>{userData.email || 'Loading...'}</Text>
+        </View>
 
-      {/* Profile Options */}
-      <View style={styles.optionsContainer}>
-        {renderOption('history', 'Order History', () => navigation.navigate('OrderHistory'))}
-        {renderOption('location-on', 'Shipping Address', () => navigation.navigate('ShippingAddress'))}
-        {renderOption('support-agent', 'Create Request', () => navigation.navigate('CreateRequest'))}
-        {renderOption('policy', 'Privacy Policy', () => navigation.navigate('PrivacyPolicy'))}
-        {renderOption('logout', 'Log Out', handleLogout)}
+        {/* Profile Options */}
+        <View style={styles.optionsContainer}>
+          {renderOption('history', 'Order History', () =>
+            navigation.navigate('OrderHistory'),
+          )}
+          {renderOption('location-on', 'Shipping Address', () =>
+            navigation.navigate('ShippingAddress'),
+          )}
+          {renderOption('support-agent', 'Create Request', () =>
+            navigation.navigate('CreateRequest'),
+          )}
+          {renderOption('policy', 'Privacy Policy', () =>
+            navigation.navigate('PrivacyPolicy'),
+          )}
+          {renderOption('logout', 'Log Out', handleLogout)}
+        </View>
       </View>
-    </View>
+    </>
   );
 };
 
@@ -119,6 +147,7 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 24,
     fontWeight: 'bold',
+    color: '#666',
     marginTop: 10,
   },
   email: {
@@ -143,17 +172,17 @@ const styles = StyleSheet.create({
   },
   icon: {
     position: 'absolute',
-    color: "#AE6B77"
+    color: '#AE6B77',
   },
   optionText: {
     fontSize: 18,
     marginLeft: 15,
     flex: 1,
-    color: "#AE6B77",
+    color: '#AE6B77',
   },
   arrowIcon: {
     marginRight: 10,
-    color: "#AE6B77"
+    color: '#AE6B77',
   },
 });
 

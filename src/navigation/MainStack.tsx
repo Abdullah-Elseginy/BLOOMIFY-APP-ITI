@@ -8,7 +8,8 @@ import Register from '../screens/Signup/SignUp';
 import Introo from '../screens/Introo/Introo';
 import ProductDetails from '../screens/ProductDetails/ProductDetails';
 import CartScreen from '../screens/CartScreen';
-
+import CheckOut from '../screens/CheckOut';
+import Orders from '../screens/Orders';
 
 const Stack = createNativeStackNavigator();
 
@@ -17,7 +18,7 @@ const MainStack = () => {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{headerShown: false}}
-        initialRouteName={'Splash'}>
+        initialRouteName={'CheckOut'}>
         <Stack.Screen name={'BottomTabs'} component={BottomTabNavigator} />
         <Stack.Screen name={'Splash'} component={SplashScreen} />
         <Stack.Screen name={'Login'} component={SignIn} />
@@ -25,6 +26,8 @@ const MainStack = () => {
         <Stack.Screen name={'Introo'} component={Introo} />
         <Stack.Screen name={'productDetails'} component={ProductDetails} />
         <Stack.Screen name={'cartScreen'} component={CartScreen} />
+        <Stack.Screen name={'CheckOut'} component={CheckOut} />
+        <Stack.Screen name={'Orders'} component={Orders} />
       </Stack.Navigator>
     </NavigationContainer>
   );
