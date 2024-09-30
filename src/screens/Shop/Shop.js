@@ -14,13 +14,17 @@ import {
   query,
   limit,
   startAfter,
+  doc,
+  setDoc,
+  getDoc,
 } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 import {db} from '../../firebase/firebase';
 import {styles} from './styles';
 import AppHeader from '../../Components/Header';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
-import { addToCart } from '../../redux/slices/cartSlice';
+import { addToCart, setCartItems  } from '../../redux/slices/cartSlice';
 import toast from 'react-native-toast-message';
 
 export default function Shop() {
@@ -33,6 +37,11 @@ export default function Shop() {
 
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart);
+
+
+  const auth = getAuth(); 
+  const user = auth.currentUser;
+  const userId = user ? user.uid : null;
 
   const fetchData = async (isRefresh = false) => {
     setLoading(true);
@@ -102,6 +111,47 @@ export default function Shop() {
     dispatch(addToCart(item)); 
     toast.show({ type: 'success', text1:` ${item.name} added to cart `});
   };
+
+
+  useEffect(() => {
+    if (userId) {
+      const saveCartToFirebase = async () => {
+        try {
+          const cartRef = doc(db, 'carts', userId);
+          await setDoc(cartRef, { items: cartItems });
+        } catch (error) {
+          console.error('Error saving cart to Firebase:', error);
+        }
+      };
+
+
+      const timeoutId = setTimeout(saveCartToFirebase, 1000);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [cartItems, userId]);
+
+  
+  useEffect(() => {
+    if (userId) {
+      const loadCartFromFirebase = async () => {
+        try {
+          const cartRef = doc(db, 'carts', userId);
+          const cartDoc = await getDoc(cartRef);
+          if (cartDoc.exists()) {
+            const cartData = cartDoc.data();
+            dispatch(setCartItems(cartData.items || []));
+          }
+        } catch (error) {
+          console.error('Error loading cart from Firebase:', error);
+        }
+      };
+
+      loadCartFromFirebase();
+    }
+  }, [dispatch, userId]);
+
+
+
 
   const renderItem = ({item}) => {
 
