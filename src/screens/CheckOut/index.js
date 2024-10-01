@@ -16,26 +16,85 @@ import {TextInput} from 'react-native-gesture-handler';
 import Constant from '../../constants/Constant';
 import {hp, wp} from '../../constants/Dimensions';
 import {useNavigation} from '@react-navigation/native';
+import { getAuth } from 'firebase/auth';
+import { doc, collection, addDoc, setDoc } from 'firebase/firestore';
+import { db } from '../../firebase/firebase';
+import { useSelector, useDispatch } from 'react-redux';
+import { clearCart } from '../../redux/slices/cartSlice';
 
 const CheckOut = () => {
   const [selectedOption, setSelectedOption] = useState('online');
   const [successfulPayment, setSuccessfulPayment] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
-  const payNow = () => {
+  const auth = getAuth();
+  const user = auth.currentUser;
+  const userId = user ? user.uid : null;
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart.items);
+
+
+  const saveOrderToFirebase = async () => {
+    if (userId && Array.isArray(cartItems) && cartItems.length > 0) {
+    try {
+      const userRef = doc(db, 'users', userId);
+      const ordersRef = collection(userRef, 'orders');
+      
+      await addDoc(ordersRef, {
+          cartItems: cartItems,
+          totalPrice: totalPrice,
+          orderDate: new Date(),
+          
+      });
+    
+      console.log('Order saved successfully');
+    } catch (error) {
+      console.error("Error saving order to Firebase:", error);
+    }
+    }
+}
+
+
+
+
+
+
+  const clearCartInFirebase = async () => {
+    if (userId) {
+      try {
+        const cartRef = doc(db, 'carts', userId);
+        await setDoc(cartRef, { items: [] }); 
+      } catch (error) {
+        console.error('Error clearing cart in Firebase:', error);
+      }
+    }
+  };
+
+
+
+  const payNow = async () => {
     setLoading(true);
-    setTimeout(() => {
+    await saveOrderToFirebase('Online');
+
+    setTimeout(async() => {
       setSuccessfulPayment(true);
       setLoading(false);
+      dispatch(clearCart()); 
+      await clearCartInFirebase();
       setTimeout(() => {
         navigation.navigate('Orders');
       }, 2000);
     }, 2000);
   };
-  const cashondelivary = () => {
+
+
+  const cashondelivary = async() => {
     setLoading(true);
-    setTimeout(() => {
+    await saveOrderToFirebase('Cash on Delivery');
+    setTimeout(async () => {
       setLoading(false);
+      dispatch(clearCart());
+      await clearCartInFirebase();
       navigation.navigate('Orders');
     }, 2000);
   };

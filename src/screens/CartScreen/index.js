@@ -5,7 +5,7 @@ import { removeFromCart, incrementQuantity, decrementQuantity, setCartItems } fr
 import AppHeader from '../../Components/Header';
 import styles from './styles'; 
 import CartSummary from './cartSummary';
-import { db } from '../../firebase/firebase'; 
+import { db, auth } from '../../firebase/firebase'; 
 import { getAuth } from 'firebase/auth';
 import { setDoc, doc, getDoc } from 'firebase/firestore';
 
@@ -13,7 +13,7 @@ const CartScreen = () => {
   const dispatch = useDispatch();
   const cartItems = useSelector(state => state.cart);
 
-  const auth = getAuth();
+  // const auth = getAuth();
   const user = auth.currentUser;
   const userId = user ? user.uid : null;
 

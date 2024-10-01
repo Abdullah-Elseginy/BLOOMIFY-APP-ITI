@@ -18,7 +18,7 @@ const MainStack = () => {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{headerShown: false}}
-        initialRouteName={'CheckOut'}>
+        initialRouteName={'BottomTabs'}>
         <Stack.Screen name={'BottomTabs'} component={BottomTabNavigator} />
         <Stack.Screen name={'Splash'} component={SplashScreen} />
         <Stack.Screen name={'Login'} component={SignIn} />

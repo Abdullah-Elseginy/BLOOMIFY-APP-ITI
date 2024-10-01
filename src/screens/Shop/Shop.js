@@ -19,7 +19,7 @@ import {
   getDoc,
 } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
-import {db} from '../../firebase/firebase';
+import {db , auth} from '../../firebase/firebase';
 import {styles} from './styles';
 import AppHeader from '../../Components/Header';
 import { useNavigation } from '@react-navigation/native';
@@ -39,7 +39,7 @@ export default function Shop() {
   const cartItems = useSelector((state) => state.cart);
 
 
-  const auth = getAuth(); 
+  // const auth = getAuth(); 
   const user = auth.currentUser;
   const userId = user ? user.uid : null;
 
@@ -107,11 +107,19 @@ export default function Shop() {
 
   const {navigate} = useNavigation();
 
-  const addCart = (item) => {
-    dispatch(addToCart(item)); 
-    toast.show({ type: 'success', text1:` ${item.name} added to cart `});
-  };
+  // const addCart = (item) => {
+  //   dispatch(addToCart(item)); 
+  //   toast.show({ type: 'success', text1:` ${item.name} added to cart `});
+  // };
 
+  const addCart = (item) => {
+    if (user) {
+      dispatch(addToCart(item)); 
+      toast.show({ type: 'success', text1: `${item.name} added to cart` });
+    } else {
+      navigate('Login'); 
+    }
+  };
 
   useEffect(() => {
     if (userId) {
