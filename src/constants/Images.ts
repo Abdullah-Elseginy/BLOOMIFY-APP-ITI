@@ -21,5 +21,6 @@ const IMAGES = {
   Paypal: require('../assets/images/PayPal.svg.png'),
   Mastercard: require('../assets/images/Visa-Logo-PNG7.png'),
   Success: require('../assets/images/check.png'),
+  CartEmpty: require('../assets/images/cartempty.png'),
 };
 export default IMAGES;

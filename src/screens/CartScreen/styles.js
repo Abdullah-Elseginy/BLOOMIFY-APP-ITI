@@ -61,7 +61,7 @@ export const styles = StyleSheet.create({
   quantityText: {
     fontSize: 16,
     marginHorizontal: 8,
-    color:Constant.colors['deep-burgundy']
+    color: Constant.colors['deep-burgundy'],
   },
   button: {
     width: 32,
@@ -92,6 +92,34 @@ export const styles = StyleSheet.create({
   Plusminus: {
     color: Constant.colors['deep-burgundy'],
     fontSize: hp(2.5),
+  },
+  cartemptyimage: {
+    width: wp(30),
+    height: hp(15),
+    alignSelf: 'center',
+  },
+  Text: {
+    color: Constant.colors['deep-burgundy'],
+    fontWeight: '500',
+    textAlign: 'center',
+  },
+  center: {
+    justifyContent: 'center',
+    flex: 1,
+    padding: wp(4),
+  },
+  btn: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: wp(3.2),
+    backgroundColor: Constant.colors['deep-burgundy'],
+    borderRadius: wp(2),
+    marginTop: hp(2),
+  },
+  textbtn: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: hp(2),
   },
 });
 

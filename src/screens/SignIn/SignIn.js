@@ -199,6 +199,18 @@ export default function SignIn() {
               </Text>
             </TouchableOpacity>
           </View>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.replace('BottomTabs');
+            }}>
+            <Text
+              style={{
+                fontSize: wp(4.2),
+                color: constant.colors['deep-burgundy'],
+              }}>
+              Skip Logon
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
     </ScrollView>

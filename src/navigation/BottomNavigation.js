@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react/no-unstable-nested-components */
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Platform, StyleSheet, Text, View} from 'react-native';
 import colors from '../constants/Constant';
@@ -13,13 +13,32 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import Constant from '../constants/Constant';
 import Shop from '../screens/Shop/Shop';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const Tab = createBottomTabNavigator();
 
 const BottomTabNavigator = () => {
+  const [userToken, SetUserToken] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const value = await AsyncStorage.getItem('userToken');
+        if (value !== null) {
+          SetUserToken(value);
+          console.log('usertoken22222', value);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    fetchData();
+  }, []);
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
         tabBarHideOnKeyboard: true,
+        tabBarLabelPosition: 'below-icon',
         tabBarLabel: ({focused}) => {
           return (
             <View>
@@ -164,6 +183,7 @@ const BottomTabNavigator = () => {
       <Tab.Screen name={'Home'} component={HomeScreen} />
       <Tab.Screen name={'Shop'} component={Shop} />
       <Tab.Screen name={'cart'} component={CartScreen} />
+
       <Tab.Screen name={'Profile'} component={Profile} />
     </Tab.Navigator>
   );

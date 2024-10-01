@@ -111,5 +111,36 @@ const styles = StyleSheet.create({
     marginTop: hp(2),
     fontWeight: '700',
   },
+  totla: {
+    fontSize: hp(2.5),
+    color: Constant.colors['deep-burgundy'],
+    textAlign: 'center',
+    fontWeight: '500',
+  },
+  totlaamout: {
+    fontSize: hp(2.3),
+    color: '#0eab25',
+    fontWeight: '600',
+  },
+  orders: {
+    marginBottom: hp(2),
+    elevation: 2,
+    backgroundColor: Constant.colors.white,
+    padding: hp(1),
+    borderRadius: wp(1),
+  },
+  marginr: {
+    marginLeft: wp(2),
+  },
+  text: {
+    color: Constant.colors['dark-brownish'],
+  },
+  amout: {
+    justifyContent: 'center',
+  },
+  errorText: {
+    color: '#991111',
+    marginTop: hp(0.5),
+  },
 });
 export default styles;
