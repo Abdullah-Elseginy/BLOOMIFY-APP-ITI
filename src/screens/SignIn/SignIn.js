@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
@@ -21,6 +22,7 @@ import {db} from '../../firebase/firebase';
 import {auth} from '../../firebase/firebase';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Animatable from 'react-native-animatable';
+import Constant from '../../constants/Constant';
 export default function SignIn() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -39,23 +41,26 @@ export default function SignIn() {
   });
 
   return (
-    <ScrollView
-      style={{flex: 1, backgroundColor: constant.colors['pale-grayish']}}>
+    <ScrollView style={{flex: 1}}>
       <View style={{flex: 1}}>
-        <View
-          style={{
-            width: '100%',
-            height: '100%',
-            alignItems: 'center',
-            backgroundColor: constant.colors['pale-grayish'],
-          }}>
+        <View style={{}}>
           <Animatable.Image
             animation="zoomInDown"
             duration={4000}
             source={IMAGES.LoginPng}
             resizeMode="contain"
-            style={{width: wp(80), height: hp(45)}}
+            style={{width: wp(55), height: hp(30), alignSelf: 'center'}}
           />
+          <Text
+            style={{
+              color: Constant.colors['deep-burgundy'],
+              textAlign: 'center',
+              fontSize: wp(7),
+              fontWeight: '700',
+              marginBottom: hp(3),
+            }}>
+            Sign In Now
+          </Text>
 
           <Formik
             style={{width: '100%'}}
@@ -107,7 +112,16 @@ export default function SignIn() {
               errors,
               touched,
             }) => (
-              <View style={{width: '100%', alignItems: 'center'}}>
+              <View style={{paddingHorizontal: wp(4), width: '100%'}}>
+                <Text
+                  style={{
+                    color: Constant.colors['deep-burgundy'],
+                    fontSize: wp(4),
+                    fontWeight: '500',
+                    marginBottom: hp(0.5),
+                  }}>
+                  Enter Email
+                </Text>
                 <TextInput
                   onChangeText={handleChange('email')}
                   onBlur={handleBlur('email')}
@@ -118,22 +132,37 @@ export default function SignIn() {
                   onPressIn={() => setImailPressed(true)}
                   onEndEditing={() => setImailPressed(false)}
                   style={{
-                    borderWidth: 1,
-                    width: wp(90),
+                    borderWidth: wp(0.13),
                     borderColor: imailPressed
                       ? constant.colors['dark-brownish']
                       : constant.colors['deep-burgundy'],
+
                     padding: hp(1),
-                    borderRadius: 10,
-                    marginVertical: hp(1),
+                    borderRadius: wp(2),
+                    marginVertical: hp(0.5),
+                    color: Constant.colors['deep-burgundy'],
                   }}
                 />
                 {touched.email && errors.email && (
-                  <Text style={{color: 'red', width: wp(80)}}>
+                  <Text
+                    style={{
+                      color: '#d31e1e',
+                      width: wp(80),
+                      marginBottom: hp(2),
+                    }}>
                     {errors.email}
                   </Text>
                 )}
-
+                <Text
+                  style={{
+                    color: Constant.colors['deep-burgundy'],
+                    fontSize: wp(4),
+                    fontWeight: '500',
+                    marginTop: hp(2),
+                    marginBottom: hp(0.5),
+                  }}>
+                  Enter Password
+                </Text>
                 <TextInput
                   onChangeText={handleChange('password')}
                   onBlur={handleBlur('password')}
@@ -144,30 +173,58 @@ export default function SignIn() {
                   onPressIn={() => setPassPressed(true)}
                   onPressOut={() => setPassPressed(false)}
                   style={{
-                    borderWidth: 1,
+                    borderWidth: wp(0.13),
                     padding: hp(1),
-                    width: wp(90),
-                    borderRadius: 10,
-                    marginVertical: hp(1),
+                    borderRadius: wp(2),
+                    marginVertical: hp(0.5),
                     borderColor: passPressed
                       ? constant.colors['dark-brownish']
                       : constant.colors['deep-burgundy'],
+                    color: Constant.colors['deep-burgundy'],
                   }}
                 />
+
                 {touched.password && errors.password && (
                   <Text
-                    style={{color: 'red', marginBottom: hp(2), width: wp(80)}}>
+                    style={{
+                      color: '#d31e1e',
+                      marginBottom: hp(2),
+                      width: wp(80),
+                    }}>
                     {errors.password}
                   </Text>
                 )}
 
                 <TouchableOpacity
-                  style={[constant.mainButton, {margin: hp(3)}]}
+                  style={[
+                    {
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      backgroundColor: Constant.colors['deep-burgundy'],
+                      padding: wp(1.5),
+                      borderRadius: wp(2),
+                      marginTop: hp(5),
+                      height: hp(5),
+                    },
+                  ]}
                   onPress={() => {
                     handleSubmit();
                     // navigation.replace('BottomTabs');
                   }}>
-                  <Text style={constant.mainButtonText}>Login</Text>
+                  <Text
+                    style={{
+                      color: '#fff',
+                      fontSize: wp(4),
+                      fontWeight: 'bold',
+                    }}>
+                    {loading ? (
+                      <ActivityIndicator
+                        color={Constant.colors['light-pink']}
+                      />
+                    ) : (
+                      'Login'
+                    )}
+                  </Text>
                 </TouchableOpacity>
               </View>
             )}
@@ -192,7 +249,8 @@ export default function SignIn() {
               }}>
               <Text
                 style={{
-                  fontSize: wp(4.2),
+                  fontSize: wp(4),
+                  fontWeight: '500',
                   color: constant.colors['deep-burgundy'],
                 }}>
                 Register here
@@ -205,10 +263,13 @@ export default function SignIn() {
             }}>
             <Text
               style={{
-                fontSize: wp(4.2),
+                fontSize: wp(3.5),
+                fontWeight: '700',
                 color: constant.colors['deep-burgundy'],
+                textAlign: 'center',
+                marginTop: hp(2),
               }}>
-              Skip Logon
+              Skip Login
             </Text>
           </TouchableOpacity>
         </View>

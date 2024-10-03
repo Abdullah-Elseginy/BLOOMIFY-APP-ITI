@@ -11,6 +11,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import * as ImagePicker from 'react-native-image-picker';
 import {db} from '../../firebase/firebase'; // تأكد من مسار ملف الإعدادات الخاص بك
 import AppHeader from '../../Components/Header';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ProfileScreen = ({navigation}) => {
   const [profileImage, setProfileImage] = useState(
@@ -35,6 +36,10 @@ const ProfileScreen = ({navigation}) => {
     fetchUserData();
   }, []);
 
+  const Logout = () => {
+    AsyncStorage.clear();
+    navigation.navigate('Login');
+  };
   const handleImageChange = () => {
     ImagePicker.launchImageLibrary({}, response => {
       if (response.assets) {
@@ -46,7 +51,7 @@ const ProfileScreen = ({navigation}) => {
   const handleLogout = () => {
     Alert.alert('Logout', 'Are you sure you want to log out?', [
       {text: 'Cancel', style: 'cancel'},
-      {text: 'Log Out', onPress: () => console.log('Logged Out')},
+      {text: 'Log Out', onPress: () => Logout()},
     ]);
   };
 
@@ -90,7 +95,7 @@ const ProfileScreen = ({navigation}) => {
         {/* Profile Options */}
         <View style={styles.optionsContainer}>
           {renderOption('history', 'Order History', () =>
-            navigation.navigate('OrderHistory'),
+            navigation.navigate('Orders'),
           )}
           {renderOption('location-on', 'Shipping Address', () =>
             navigation.navigate('ShippingAddress'),

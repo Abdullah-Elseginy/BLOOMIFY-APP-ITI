@@ -5,8 +5,11 @@ import Constant from '../../constants/Constant';
 export const styles = StyleSheet.create({
   arrowBack: {
     justifyContent: 'center',
-    padding: wp(1.5),
+    padding: wp(3),
     borderRadius: wp(1.5),
+    position: 'absolute',
+    left: wp(3),
+    zIndex: 10,
   },
   headerContainer: {
     paddingVertical: hp(2),
@@ -30,7 +33,7 @@ export const styles = StyleSheet.create({
     color: '#fff',
     textTransform: 'capitalize',
     fontWeight: 'bold',
-    alignSelf: 'center',
+    textAlign: 'center',
   },
   rowCenter: {
     flexDirection: 'row',

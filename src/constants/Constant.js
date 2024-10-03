@@ -1,3 +1,5 @@
+import {wp} from './Dimensions';
+
 export default {
   colors: {
     'dark-brownish': '#6C5A4B',
@@ -9,6 +11,7 @@ export default {
     'light-grayish': '#F2F2F2',
     'light-brownish-gray': '#B39C8D',
     gray: '#ccc',
+    opacity: '#6c5a4b4d',
   },
 
   mainButton: {
@@ -23,6 +26,7 @@ export default {
   },
   mainButtonText: {
     color: '#E8E1DA',
-    fontSize: 24,
+    fontSize: wp(4.5),
+    fontweight: 'bold',
   },
 };

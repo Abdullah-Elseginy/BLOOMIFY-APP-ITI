@@ -1,22 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect, useState} from 'react';
-import {
-  View,
-  Text,
-  Image,
-  ScrollView,
-  TouchableOpacity,
-  Pressable,
-} from 'react-native';
-
+import React, {useState} from 'react';
+import {View, Text, Image, ScrollView, TouchableOpacity} from 'react-native';
 import constant from '../../constants/Constant';
 import {hp, SCREEN_WIDTH, wp} from '../../constants/Dimensions';
 import IMAGES from '../../constants/Images';
-import * as Animatable from 'react-native-animatable';
 
 export default function Introo({navigation}) {
   const [page, setPage] = useState(0);
-  const [pressed, setPressed] = useState(false);
+
   const pages = [
     {
       title: 'Welcome to Bloomify',
@@ -44,155 +35,162 @@ export default function Introo({navigation}) {
     },
   ];
 
-  useEffect(() => {
-    setTimeout(() => {
-      if (page < pages.length - 1) {
-        setPage(page + 1);
-      } else {
-        pressed ? navigation.replace('Login') : null
-      }
-    }, 2000);
-  });
+  const handleNextPage = () => {
+    if (page < pages.length - 1) {
+      setPage(page + 1);
+    } else {
+      navigation.replace('Login');
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (page > 0) {
+      setPage(page - 1);
+    }
+  };
 
   return (
-    <ScrollView
-      horizontal
-      pagingEnabled
-      showsHorizontalScrollIndicator={false}
-      style={{flex: 1, backgroundColor: constant.colors['pale-grayish']}}>
+    <View style={{flex: 1, backgroundColor: constant.colors['pale-grayish']}}>
+      <ScrollView
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        scrollEnabled={false}
+        contentContainerStyle={{flex: 1}}>
+        <View
+          style={{
+            width: SCREEN_WIDTH,
+            alignItems: 'center',
+            padding: wp(2),
+          }}>
+          {/* Skip Button */}
+          <TouchableOpacity
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+              marginBottom: hp(8),
+              padding: wp(4),
+              alignSelf: 'flex-end',
+            }}
+            onPress={() => navigation.replace('Login')}>
+            <Text
+              style={{
+                color: constant.colors['deep-burgundy'],
+                fontSize: wp(4),
+                fontWeight: '500',
+              }}>
+              Skip
+            </Text>
+          </TouchableOpacity>
+
+          {/* Image */}
+          <Image
+            source={pages[page].image}
+            style={{width: wp(70), height: hp(35), marginBottom: hp(1)}}
+            resizeMode="contain"
+          />
+
+          {/* Title */}
+          <Text
+            style={{
+              fontSize: wp(6),
+              fontWeight: 'bold',
+              color: constant.colors['deep-burgundy'],
+            }}>
+            {pages[page].title}
+          </Text>
+
+          {/* Description */}
+          <Text
+            style={{
+              fontSize: wp(4),
+              color: constant.colors['dark-brownish'],
+              textAlign: 'center',
+              marginTop: hp(2),
+              paddingHorizontal: wp(10),
+            }}>
+            {pages[page].description}
+          </Text>
+
+          {/* Page Indicator */}
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              marginTop: hp(4),
+            }}>
+            {pages.map((_, index) => (
+              <View
+                key={index}
+                style={{
+                  width: wp(5),
+                  height: wp(5),
+                  borderRadius: wp(2.5),
+                  backgroundColor:
+                    index === page ? constant.colors['deep-burgundy'] : '#ddd',
+                  marginHorizontal: wp(1),
+                }}
+              />
+            ))}
+          </View>
+        </View>
+      </ScrollView>
+
+      {/* Navigation Buttons */}
       <View
         style={{
-          width: SCREEN_WIDTH,
-          alignItems: 'center',
-          padding: hp(2),
+          position: 'absolute',
+          bottom: hp(4),
+          width: '100%',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          paddingHorizontal: wp(4),
         }}>
+        {/* Previous Button */}
         <TouchableOpacity
+          onPress={handlePreviousPage}
+          disabled={page === 0}
           style={{
-            flexDirection: 'row',
-            justifyContent: 'flex-end',
-
+            paddingVertical: hp(1),
+            width: wp(25),
+            justifyContent: 'center',
             alignItems: 'center',
-            marginBottom: hp(6),
-            padding: hp(2),
-            alignSelf: 'flex-end',
-          }}
-          onPress={() => {
-            setPressed(true)
-            navigation.replace('Login');
-            
+            backgroundColor:
+              page === 0 ? '#aaa' : constant.colors['dark-brownish'],
+            borderRadius: wp(2),
           }}>
           <Text
             style={{
-              color: constant.colors['deep-burgundy'],
-              fontSize: 20,
-              marginRight: hp(1),
+              fontSize: wp(4),
+              color: '#fff',
+              fontWeight: 'bold',
             }}>
-            Skip
+            Previous
           </Text>
-          <Image
-            source={require('../../assets/images/skip.png')}
-            style={{width: wp(5), height: hp(5)}}
-          />
         </TouchableOpacity>
 
-        <Image
-          source={pages[page].image}
-          style={{width: wp(80), height: hp(40), marginBottom: hp(5)}}
-          resizeMode="contain"
-        />
-        <Text
+        {/* Next Button */}
+        <TouchableOpacity
+          onPress={handleNextPage}
           style={{
-            fontSize: wp(6),
-            fontWeight: 'bold',
-            color: constant.colors['dark-brownish'],
+            paddingVertical: hp(1),
+            width: wp(25),
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: constant.colors['deep-burgundy'],
+            borderRadius: wp(2),
           }}>
-          {pages[page].title}
-        </Text>
-        <Text
-          style={{
-            fontSize: wp(4),
-            color: constant.colors['dark-brownish'],
-            textAlign: 'center',
-            marginTop: hp(2),
-          }}>
-          {page.description}
-        </Text>
-
-        <View style={{flexDirection: 'row'}}>
-          <View
+          <Text
             style={{
-              width: wp(2),
-              height: hp(1),
-              backgroundColor: constant.colors['deep-burgundy'],
-              marginRight: wp(2),
-              borderRadius: hp(1),
-            }}
-          />
-          {page >= 1 ? (
-            <View
-              style={{
-                width: wp(2),
-                height: hp(1),
-                backgroundColor: constant.colors['deep-burgundy'],
-                marginRight: wp(2),
-                borderRadius: hp(1),
-              }}
-            />
-          ) : (
-            <View
-              style={{
-                width: wp(2),
-                height: hp(1),
-                backgroundColor: '#ddd',
-                marginRight: wp(2),
-                borderRadius: hp(1),
-              }}
-            />
-          )}
-          {page >= 2 ? (
-            <View
-              style={{
-                width: wp(2),
-                height: hp(1),
-                backgroundColor: constant.colors['deep-burgundy'],
-                marginRight: wp(2),
-                borderRadius: hp(1),
-              }}
-            />
-          ) : (
-            <View
-              style={{
-                width: wp(2),
-                height: hp(1),
-                backgroundColor: '#ddd',
-                marginRight: wp(2),
-                borderRadius: hp(1),
-              }}
-            />
-          )}
-          {page == 3 ? (
-            <View
-              style={{
-                width: wp(2),
-                height: hp(1),
-                backgroundColor: constant.colors['deep-burgundy'],
-                marginRight: wp(2),
-                borderRadius: hp(1),
-              }}
-            />
-          ) : (
-            <View
-              style={{
-                width: wp(2),
-                height: hp(1),
-                backgroundColor: '#ddd',
-                marginRight: wp(2),
-                borderRadius: hp(1),
-              }}
-            />
-          )}
-        </View>
+              fontSize: wp(4),
+              color: '#fff',
+              fontWeight: 'bold',
+            }}>
+            {page === pages.length - 1 ? 'Get Started' : 'Next'}
+          </Text>
+        </TouchableOpacity>
       </View>
-    </ScrollView>
+    </View>
   );
 }
