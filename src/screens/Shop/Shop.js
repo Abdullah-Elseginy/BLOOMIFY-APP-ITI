@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -18,17 +18,18 @@ import {
   setDoc,
   getDoc,
 } from 'firebase/firestore';
-import {getAuth} from 'firebase/auth';
-import {db, auth} from '../../firebase/firebase';
-import {styles} from './styles';
+import { getAuth } from 'firebase/auth';
+import { db, auth } from '../../firebase/firebase';
+import { styles } from './styles';
 import AppHeader from '../../Components/Header';
-import {useNavigation} from '@react-navigation/native';
-import {useDispatch, useSelector} from 'react-redux';
-import {addToCart, setCartItems} from '../../redux/slices/cartSlice';
+import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToCart, setCartItems } from '../../redux/slices/cartSlice';
 import toast from 'react-native-toast-message';
+import SearchBar from '../../Components/SrarchBar'; 
 
 export default function Shop() {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState([]); 
   const [loading, setLoading] = useState(false);
   const [lastVisible, setLastVisible] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
@@ -36,8 +37,7 @@ export default function Shop() {
 
   const dispatch = useDispatch();
   const cartItems = useSelector(state => state.cart);
-
-  // const auth = getAuth();
+  
   const user = auth.currentUser;
   const userId = user ? user.uid : null;
 
@@ -55,9 +55,9 @@ export default function Shop() {
       setLastVisible(querySnapShot.docs[querySnapShot.docs.length - 1]);
 
       if (isRefresh) {
-        setProducts(dataQuery);
+        setProducts(dataQuery); 
       } else {
-        setProducts(prev => [...prev, ...dataQuery]);
+        setProducts(prev => [...prev, ...dataQuery]); 
       }
     } catch (error) {
       console.error('Error fetching products: ', error);
@@ -85,7 +85,6 @@ export default function Shop() {
       }));
 
       setLastVisible(querySnapShot.docs[querySnapShot.docs.length - 1]);
-
       setProducts(prev => [...prev, ...dataQuery]);
     } catch (error) {
       console.error('Error fetching more products: ', error);
@@ -100,20 +99,15 @@ export default function Shop() {
   };
 
   useEffect(() => {
-    fetchData();
+    fetchData(); 
   }, []);
 
-  const {navigate} = useNavigation();
-
-  // const addCart = (item) => {
-  //   dispatch(addToCart(item));
-  //   toast.show({ type: 'success', text1:` ${item.name} added to cart `});
-  // };
+  const { navigate } = useNavigation();
 
   const addCart = item => {
     if (user) {
       dispatch(addToCart(item));
-      toast.show({type: 'success', text1: `${item.name} added to cart`});
+      toast.show({ type: 'success', text1: `${item.name} added to cart` });
     } else {
       navigate('Login');
     }
@@ -124,7 +118,7 @@ export default function Shop() {
       const saveCartToFirebase = async () => {
         try {
           const cartRef = doc(db, 'carts', userId);
-          await setDoc(cartRef, {items: cartItems});
+          await setDoc(cartRef, { items: cartItems });
         } catch (error) {
           console.error('Error saving cart to Firebase:', error);
         }
@@ -154,7 +148,7 @@ export default function Shop() {
     }
   }, [dispatch, userId]);
 
-  const renderItem = ({item}) => {
+  const renderItem = ({ item }) => {
     const isInCart = cartItems.some(cartItem => cartItem.id === item.id);
 
     return (
@@ -163,13 +157,13 @@ export default function Shop() {
         style={styles.productContainer}
         activeOpacity={0.7}
         onPress={() => navigate('productDetails', item.id)}>
-        <Image source={{uri: item.image}} style={styles.productImage} />
+        <Image source={{ uri: item.image }} style={styles.productImage} />
         <Text style={styles.productName}>
           {item.name.length > 18 ? item.name.slice(0, 18) + '...' : item.name}
         </Text>
         <Text style={styles.productPrice}>{item.price} EGP</Text>
         <TouchableOpacity
-          style={[styles.addButton, isInCart && {opacity: 0.5}]}
+          style={[styles.addButton, isInCart && { opacity: 0.5 }]}
           onPress={() => !isInCart && addCart(item)}
           activeOpacity={isInCart ? 1 : 0.7}>
           <Text style={styles.addButtonText}>
@@ -179,10 +173,12 @@ export default function Shop() {
       </TouchableOpacity>
     );
   };
+
   return (
     <>
       <AppHeader title={'Shop Now '} />
       <View style={styles.container}>
+        <SearchBar products={products} setFilteredProducts={setProducts} />
         {loading && products.length === 0 ? (
           <View style={styles.activity}>
             <ActivityIndicator size="large" color="#AE6B77" />
@@ -194,8 +190,8 @@ export default function Shop() {
             keyExtractor={item => item.id.toString()}
             numColumns={2}
             columnWrapperStyle={styles.row}
-            onEndReached={loadMore} // Load more when the end is reached
-            onEndReachedThreshold={0.5} // Trigger loadMore at 50% of the screen height before reaching the end
+            onEndReached={loadMore}
+            onEndReachedThreshold={0.5}
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
@@ -208,6 +204,7 @@ export default function Shop() {
     </>
   );
 }
+
 
 //import { useDispatch, useSelector } from 'react-redux';
 // import { addToCart } from '../../redux/cartSlice';
