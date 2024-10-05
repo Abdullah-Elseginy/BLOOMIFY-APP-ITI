@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
-import { View, TextInput, StyleSheet } from 'react-native';
+import React, {useState} from 'react';
+import {View, TextInput, StyleSheet} from 'react-native';
+import Constant from '../constants/Constant';
+import {hp, wp} from '../constants/Dimensions';
 
-const SearchBar = ({ products, setFilteredProducts }) => {
+const SearchBar = ({products, setFilteredProducts}) => {
   const [searchText, setSearchText] = useState('');
 
-  const handleSearch = (text) => {
+  const handleSearch = text => {
     setSearchText(text);
 
     if (text === '') {
@@ -12,8 +14,8 @@ const SearchBar = ({ products, setFilteredProducts }) => {
       setFilteredProducts(products);
     } else {
       // Filter products based on the search text
-      const filtered = products.filter(item => 
-        item.name.toLowerCase().includes(text.toLowerCase())
+      const filtered = products.filter(item =>
+        item.name.toLowerCase().includes(text.toLowerCase()),
       );
       setFilteredProducts(filtered);
     }
@@ -24,6 +26,7 @@ const SearchBar = ({ products, setFilteredProducts }) => {
       <TextInput
         style={styles.input}
         placeholder="Search products..."
+        placeholderTextColor={Constant.colors['deep-burgundy']}
         value={searchText}
         onChangeText={handleSearch}
       />
@@ -33,14 +36,18 @@ const SearchBar = ({ products, setFilteredProducts }) => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
+    borderWidth: wp(0.2),
+    borderColor: Constant.colors['light-pink'],
+    borderRadius: wp(2),
+    marginBottom: wp(2),
+    alignSelf: 'center',
+    width: '100%',
   },
   input: {
-    height: 40,
+    height: hp(5),
     borderColor: '#ccc',
-    borderWidth: 1,
-    paddingLeft: 10,
-    borderRadius: 5,
+    paddingHorizontal: wp(2),
+    color: Constant.colors['deep-burgundy'],
   },
 });
 

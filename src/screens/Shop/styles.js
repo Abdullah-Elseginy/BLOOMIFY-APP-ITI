@@ -8,6 +8,7 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: hp(1),
+    paddingHorizontal: wp(3),
     backgroundColor: '#fff',
   },
   row: {
@@ -24,10 +25,10 @@ export const styles = StyleSheet.create({
     borderWidth: wp(0.1),
     borderColor: Constant.colors['light-pink'],
   },
-  headerOfView:{
-    width:wp(45),
-    justifyContent:'flex-start',
-    alignItems:'center',
+  headerOfView: {
+    width: wp(45),
+    justifyContent: 'flex-start',
+    alignItems: 'center',
   },
   productImage: {
     width: '100%',

@@ -16,6 +16,7 @@ import AppHeader from '../../Components/Header';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constant from '../../constants/Constant';
 import {hp, wp} from '../../constants/Dimensions';
+import IMAGES from '../../constants/Images';
 
 const ProfileScreen = ({navigation}) => {
   const [userData, setUserData] = useState(null);
@@ -49,7 +50,7 @@ const ProfileScreen = ({navigation}) => {
 
   const Logout = () => {
     AsyncStorage.clear();
-    navigation.navigate('Login');
+    navigation.replace('Login');
   };
 
   const handleImageChange = () => {
@@ -95,10 +96,10 @@ const ProfileScreen = ({navigation}) => {
   }, []);
   return (
     <>
-      <AppHeader title={userData?.name} />
+      <AppHeader title={'Welcome ' + userData?.name} />
       {userToken === null ? (
         <View style={styles.center}>
-          <Text style={styles.Text}>Please Login to view your cart</Text>
+          <Text style={styles.Text}>Please Login have a profile</Text>
           <TouchableOpacity
             onPress={() => {
               navigation.replace('Login');
@@ -118,16 +119,14 @@ const ProfileScreen = ({navigation}) => {
                 <View style={styles.outerCircle}>
                   <View style={styles.innerCircle}>
                     <Image
-                      source={{uri: profileImage}}
+                      source={{uri: profileImage} || IMAGES.Profile}
                       style={styles.profileImage}
                     />
                   </View>
                 </View>
               </TouchableOpacity>
-              <Text style={styles.name}>{userData?.name || 'Loading...'}</Text>
-              <Text style={styles.email}>
-                {userData?.email || 'Loading...'}
-              </Text>
+              <Text style={styles.name}>{userData?.name}</Text>
+              <Text style={styles.email}>{userData?.email}</Text>
             </View>
 
             {/* Profile Options */}
@@ -327,10 +326,12 @@ const styles = StyleSheet.create({
   btn: {
     justifyContent: 'center',
     alignItems: 'center',
-    padding: wp(3.2),
+    padding: wp(2.8),
     backgroundColor: Constant.colors['deep-burgundy'],
     borderRadius: wp(2),
-    marginTop: hp(2),
+    marginTop: hp(3),
+    alignSelf: 'center',
+    width: wp(30),
   },
   textbtn: {
     color: '#fff',

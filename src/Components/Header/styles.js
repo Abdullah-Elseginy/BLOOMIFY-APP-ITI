@@ -16,15 +16,16 @@ export const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: wp(4),
     alignSelf: 'center',
-    backgroundColor: Constant.colors['deep-burgundy'],
+    backgroundColor: Constant.colors['light-pink'],
     height: hp(8),
+    elevation: 5,
   },
   titleBox: {
     flex: 1,
   },
   title: {
     fontSize: wp(4.5),
-    color: '#fff',
+    color: Constant.colors['deep-burgundy'],
     textTransform: 'capitalize',
     fontWeight: 'bold',
     textAlign: 'center',

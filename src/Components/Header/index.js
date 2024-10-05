@@ -4,6 +4,7 @@ import {useNavigation} from '@react-navigation/native';
 import {styles} from './styles';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {wp} from '../../constants/Dimensions';
+import Constant from '../../constants/Constant';
 const AppHeader = ({
   title,
   titleStyle,
@@ -22,7 +23,11 @@ const AppHeader = ({
         <TouchableOpacity
           style={[styles.arrowBack, {backgroundColor: arrowBackColor}]}
           onPress={() => navigation.goBack()}>
-          <MaterialIcons name={'arrow-back-ios'} size={wp(5)} color={'#fff'} />
+          <MaterialIcons
+            name={'arrow-back-ios'}
+            size={wp(5)}
+            color={Constant.colors['deep-burgundy']}
+          />
         </TouchableOpacity>
       )}
       <View style={styles.titleBox}>

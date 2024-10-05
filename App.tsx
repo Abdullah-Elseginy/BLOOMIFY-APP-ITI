@@ -9,18 +9,17 @@ import {persistor, store} from './src/redux/store';
 import Constant from './src/constants/Constant';
 import Toast from 'react-native-toast-message';
 
-
 function App(): React.JSX.Element {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <GestureHandlerRootView style={{flex: 1}}>
           <StatusBar
-            barStyle="light-content"
-            backgroundColor={Constant.colors['deep-burgundy']}
+            barStyle="dark-content"
+            backgroundColor={Constant.colors['light-pink']}
           />
           <MainStack />
-          <Toast/>
+          <Toast />
         </GestureHandlerRootView>
       </PersistGate>
     </Provider>

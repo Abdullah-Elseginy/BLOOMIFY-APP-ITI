@@ -111,10 +111,12 @@ export const styles = StyleSheet.create({
   btn: {
     justifyContent: 'center',
     alignItems: 'center',
-    padding: wp(3.2),
+    padding: wp(2.8),
     backgroundColor: Constant.colors['deep-burgundy'],
     borderRadius: wp(2),
-    marginTop: hp(2),
+    marginTop: hp(3),
+    width: wp(30),
+    alignSelf: 'center',
   },
   textbtn: {
     color: '#fff',

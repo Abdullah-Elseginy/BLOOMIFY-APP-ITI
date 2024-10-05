@@ -47,7 +47,7 @@ const BottomTabNavigator = () => {
                   styles.tabBarName,
                   {
                     color: focused
-                      ? colors.colors['light-pink']
+                      ? colors.colors['deep-burgundy']
                       : colors.colors['dusty-mauve'],
                     fontWeight: focused ? 'bold' : '400',
                   },
@@ -68,7 +68,7 @@ const BottomTabNavigator = () => {
                   justifyContent: 'center',
                 }}>
                 <AntDesign
-                  color={colors.colors['light-pink']}
+                  color={colors.colors['deep-burgundy']}
                   size={wp(5)}
                   name={'home'}
                 />
@@ -97,7 +97,7 @@ const BottomTabNavigator = () => {
                   justifyContent: 'center',
                 }}>
                 <AntDesign
-                  color={Constant.colors['light-pink']}
+                  color={Constant.colors['deep-burgundy']}
                   size={wp(5)}
                   name={'shoppingcart'}
                 />
@@ -126,7 +126,7 @@ const BottomTabNavigator = () => {
                   justifyContent: 'center',
                 }}>
                 <Ionicons
-                  color={colors.colors['light-pink']}
+                  color={colors.colors['deep-burgundy']}
                   size={wp(5)}
                   name={'person-circle-outline'}
                 />
@@ -155,7 +155,7 @@ const BottomTabNavigator = () => {
                   justifyContent: 'center',
                 }}>
                 <Feather
-                  color={colors.colors['light-pink']}
+                  color={colors.colors['deep-burgundy']}
                   size={wp(5)}
                   name={'shopping-bag'}
                 />
@@ -197,11 +197,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: Platform.OS === 'ios' ? hp(12.5) : hp(8.5),
     width: wp('100%'),
-    borderWidth: 1,
-    backgroundColor: colors.colors['deep-burgundy'],
-    borderTopWidth: wp(0.2),
-    borderTopColor: colors.colors['dusty-mauve'],
+    backgroundColor: colors.colors['light-pink'],
     paddingTop: Platform.OS === 'ios' ? hp(2) : hp(1.5),
+    elevation: 10,
     shadowOffset: {
       width: 0,
       height: 1,

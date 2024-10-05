@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -18,14 +18,15 @@ import {
   setDoc,
   getDoc,
 } from 'firebase/firestore';
-import { db, auth } from '../../firebase/firebase';
-import { styles } from './styles';
+import {db, auth} from '../../firebase/firebase';
+import {styles} from './styles';
 import AppHeader from '../../Components/Header';
-import { useNavigation } from '@react-navigation/native';
-import { useDispatch, useSelector } from 'react-redux';
-import { addToCart, setCartItems } from '../../redux/slices/cartSlice';
+import {useNavigation} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
+import {addToCart, setCartItems} from '../../redux/slices/cartSlice';
 import toast from 'react-native-toast-message';
 import SearchBar from '../../Components/SearchBar';
+import {wp} from '../../constants/Dimensions';
 
 export default function Shop() {
   const [products, setProducts] = useState([]);
@@ -37,7 +38,7 @@ export default function Shop() {
 
   const dispatch = useDispatch();
   const cartItems = useSelector(state => state.cart);
-  
+
   const user = auth.currentUser;
   const userId = user ? user.uid : null;
 
@@ -105,12 +106,12 @@ export default function Shop() {
     fetchData();
   }, []);
 
-  const { navigate } = useNavigation();
+  const {navigate} = useNavigation();
 
   const addCart = item => {
     if (user) {
       dispatch(addToCart(item));
-      toast.show({ type: 'success', text1: `${item.name} added to cart` }); // Fixed here
+      toast.show({type: 'success', text1: `${item.name} added to cart`}); // Fixed here
     } else {
       navigate('Login');
     }
@@ -121,7 +122,7 @@ export default function Shop() {
       const saveCartToFirebase = async () => {
         try {
           const cartRef = doc(db, 'carts', userId);
-          await setDoc(cartRef, { items: cartItems });
+          await setDoc(cartRef, {items: cartItems});
         } catch (error) {
           console.error('Error saving cart to Firebase:', error);
         }
@@ -151,7 +152,7 @@ export default function Shop() {
     }
   }, [dispatch, userId]);
 
-  const renderItem = ({ item }) => {
+  const renderItem = ({item}) => {
     const isInCart = cartItems.some(cartItem => cartItem.id === item.id);
 
     return (
@@ -162,17 +163,14 @@ export default function Shop() {
         onPress={() => navigate('productDetails', item.id)}>
         {/* Conditionally render the Image component only if the image URL is valid */}
         {item.image && (
-          <Image
-            source={{ uri: item.image }}
-            style={styles.productImage}
-          />
+          <Image source={{uri: item.image}} style={styles.productImage} />
         )}
         <Text style={styles.productName}>
           {item.name.length > 18 ? item.name.slice(0, 18) + '...' : item.name}
         </Text>
         <Text style={styles.productPrice}>{item.price} EGP</Text>
         <TouchableOpacity
-          style={[styles.addButton, isInCart && { opacity: 0.5 }]}
+          style={[styles.addButton, isInCart && {opacity: 0.5}]}
           onPress={() => !isInCart && addCart(item)}
           activeOpacity={isInCart ? 1 : 0.7}>
           <Text style={styles.addButtonText}>
@@ -187,11 +185,19 @@ export default function Shop() {
     <>
       <AppHeader title={'Shop Now '} />
       <View style={styles.container}>
-        <SearchBar products={products} setFilteredProducts={setFilteredProducts} />
-        {loading ? ( 
+        <View
+          style={{
+            paddingHorizontal: wp(1),
+          }}>
+          <SearchBar
+            products={products}
+            setFilteredProducts={setFilteredProducts}
+          />
+        </View>
+        {loading ? (
           <View style={styles.activity}>
             <ActivityIndicator size="large" color="#AE6B77" />
-            <Text>Loading products...</Text> 
+            <Text>Loading products...</Text>
           </View>
         ) : filteredProducts.length === 0 ? (
           <Text style={styles.noProductsText}>No products found.</Text>

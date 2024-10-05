@@ -22,5 +22,6 @@ const IMAGES = {
   Mastercard: require('../assets/images/Visa-Logo-PNG7.png'),
   Success: require('../assets/images/check.png'),
   CartEmpty: require('../assets/images/cartempty.png'),
+  Profile: require('../assets/images/profile.jpg'),
 };
 export default IMAGES;

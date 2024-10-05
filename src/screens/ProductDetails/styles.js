@@ -75,7 +75,7 @@ export const styles = StyleSheet.create({
     paddingBottom: 13,
     borderBottomWidth: 0.5,
     borderBottomColor: Constant.colors['pale-grayish'],
-    width:'100%',
+    width: '100%',
   },
   commentImg: {
     width: wp(13),
@@ -89,6 +89,11 @@ export const styles = StyleSheet.create({
     alignItems: 'flex-start',
     justifyContent: 'center',
     // backgroundColor:'pink',
-    width:'80%'
+    width: '80%',
+  },
+  activity: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
   },
 });

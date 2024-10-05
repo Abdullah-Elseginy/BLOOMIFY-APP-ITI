@@ -170,53 +170,54 @@ const CheckOut = () => {
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <AppHeader title={'Payment Method'} arrowBack={true} />
-      <View style={styles.container}>
-        <Image source={IMAGES.Paypal} style={styles.img} />
-        <View style={styles.Line} />
-        <View style={styles.row}>
-          <Image source={IMAGES.VISa} style={styles.img2} />
-          <Image source={IMAGES.Mastercard} style={styles.img2} />
-        </View>
-        <View style={styles.Line} />
-
-        {/* products */}
-        <View style={[styles.row, styles.amout]}>
-          <Text style={styles.totla}>Total Payment </Text>
-          <Text style={styles.totlaamout}>{cartTotal}</Text>
-          <Text style={styles.totlaamout}> EGP</Text>
-        </View>
-        <View style={styles.Line} />
-
-        <View style={[styles.orders]}>
-          <FlatList
-            data={cartItems}
-            keyExtractor={item => item.id}
-            renderItem={renderItem}
-          />
-        </View>
-        {successfulPayment ? (
-          <>
-            <View
+      {successfulPayment ? (
+        <>
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: hp(50),
+            }}>
+            <Image
+              animation="fadeIn"
+              source={IMAGES.Success}
               style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: hp(50),
-              }}>
-              <Image
-                animation="fadeIn"
-                source={IMAGES.Success}
-                style={{
-                  width: wp(31.5),
-                  height: hp(15),
-                }}
-              />
-              <Text animation="fadeIn" style={styles.successMsg}>
-                Payment Successful
-              </Text>
+                width: wp(31.5),
+                height: hp(15),
+              }}
+            />
+            <Text animation="fadeIn" style={styles.successMsg}>
+              Payment Successful
+            </Text>
+          </View>
+        </>
+      ) : (
+        <>
+          <View style={styles.container}>
+            <Image source={IMAGES.Paypal} style={styles.img} />
+            <View style={styles.Line} />
+            <View style={styles.row}>
+              <Image source={IMAGES.VISa} style={styles.img2} />
+              <Image source={IMAGES.Mastercard} style={styles.img2} />
             </View>
-          </>
-        ) : (
-          <>
+            <View style={styles.Line} />
+
+            {/* products */}
+            <View style={[styles.row, styles.amout]}>
+              <Text style={styles.totla}>Total Payment </Text>
+              <Text style={styles.totlaamout}>{cartTotal}</Text>
+              <Text style={styles.totlaamout}> EGP</Text>
+            </View>
+            <View style={styles.Line} />
+
+            <View style={[styles.orders]}>
+              <FlatList
+                data={cartItems}
+                keyExtractor={item => item.id}
+                renderItem={renderItem}
+              />
+            </View>
+
             <View style={styles.rowbetween}>
               <Pressable
                 onPress={() => setSelectedOption('online')}
@@ -353,9 +354,9 @@ const CheckOut = () => {
                 </Text>
               </TouchableOpacity>
             </View>
-          </>
-        )}
-      </View>
+          </View>
+        </>
+      )}
     </ScrollView>
   );
 };
