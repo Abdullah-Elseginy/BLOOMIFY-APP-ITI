@@ -111,51 +111,6 @@ export default function ProductDetails() {
         }
     }, [dispatch, userId]);
 
-    // Add review section 
-    const [userData, setUserData] = useState({});
-    const [userRating, setUserRating] = useState();
-    const [userComment, setUserComment] = useState();
-
-
-    useEffect(() => {
-        const getUserData = async () => {
-            try {
-                const Data = await getDoc(doc(db, "users", userId));
-                const uData = Data.data();
-                setUserData(uData);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        getUserData();
-    }, [userId]);
-
-    async function setReview() {
-        if (!userRating || !userComment) {
-            console.log("Rating and comment are required.");
-            return;
-        }
-        const rating = parseFloat(userRating);
-        try {
-            const reviewsCollectionRef = collection(doc(db, 'products', params), 'reviews');
-            await setDoc(doc(reviewsCollectionRef), {
-                rating: rating,
-                comment: userComment,
-                userName: userData.name,
-                userId: userId,
-            });
-            clearInput();
-        } catch (error) {
-            console.log(error);
-        }
-    }
-    function clearInput() {
-        setUserRating('');
-        setUserComment('');
-    }
-
-    // end of add review
-
     return (
         <>
             <AppHeader title={product.name} arrowBack={true} />
@@ -201,10 +156,6 @@ export default function ProductDetails() {
                                     <Text style={styles.title}>Description</Text>
                                     <Text style={[styles.boxText, { lineHeight: 20 }]}>{product.description}</Text>
                                 </View>
-
-                                {/* <TouchableOpacity activeOpacity={0.7} style={styles.addButton}>
-                                <Text style={styles.addButtonText}>Add to Cart</Text>
-                            </TouchableOpacity> */}
                                 <TouchableOpacity style={[styles.addButton, isInCart && { opacity: 0.5 }]} key={product.id}
                                     onPress={() => !isInCart && addCart(product)}
                                     activeOpacity={isInCart ? 1 : 0.7} >
@@ -228,29 +179,6 @@ export default function ProductDetails() {
                                             <Text style={[styles.boxText, { color: Constant.colors['light-brownish-gray'] }]}>{item.comment}</Text>
                                         </View>
                                     </View>)}
-                                </View>
-                                {/* add review */}
-                                <View style={styles.comment}>
-                                    <Text style={styles.title}>Add Review</Text>
-                                    <TextInput
-                                        placeholder='rate from 0.0 to 5.0'
-                                        placeholderTextColor={Constant.colors.gray}
-                                        keyboardType="number-pad"
-                                        style={styles.input}
-                                        onChangeText={(e) => setUserRating(e)}
-                                        value={userRating}
-                                    />
-                                    <TextInput
-                                        style={[styles.input, { height: hp(7) }]}
-                                        placeholder='your review...'
-                                        placeholderTextColor={Constant.colors.gray}
-                                        onChangeText={(e) => setUserComment(e)}
-                                        value={userComment}
-
-                                    />
-                                    <TouchableOpacity activeOpacity={0.7} style={styles.addButton} onPress={() => setReview()}>
-                                        <Text style={styles.addButtonText}>Add my Review</Text>
-                                    </TouchableOpacity>
                                 </View>
                             </View>
                         </ScrollView>

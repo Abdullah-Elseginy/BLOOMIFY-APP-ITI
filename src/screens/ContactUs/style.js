@@ -35,8 +35,8 @@ export const styles = StyleSheet.create({
         alignItems:'center',
         width:'90%',
         height:hp(7),
-        borderBottomColor:Constant.colors["deep-burgundy"],
-        borderBottomWidth:1,
+        borderBottomColor:Constant.colors["light-pink"],
+        borderBottomWidth:0.5,
     },
     txt:{
         marginLeft:20,
@@ -86,5 +86,12 @@ export const styles = StyleSheet.create({
         // alignItems:'center',
         marginTop:20,
         paddingHorizontal:40,
+    },
+    errContainer:{
+        width:'85%',
+    },
+    error:{
+        color:'red',
+        fontSize:12
     },
 })

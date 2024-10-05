@@ -91,13 +91,4 @@ export const styles = StyleSheet.create({
     // backgroundColor:'pink',
     width:'80%',
   },
-  input:{
-    borderColor:Constant.colors['dark-brownish'],
-    borderWidth:1,
-    borderRadius: wp(2),
-    height:hp(5),
-    color:Constant.colors['deep-burgundy'],
-    marginTop:15,
-    paddingHorizontal:20
-  },
 });
