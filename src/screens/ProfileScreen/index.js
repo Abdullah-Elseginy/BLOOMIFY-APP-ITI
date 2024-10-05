@@ -1,18 +1,29 @@
-
-
-import React, { useEffect, useState } from 'react';
-import { View, Text, Alert,ScrollView } from 'react-native';
-import { auth, db } from '../../firebase/firebase';
-import { doc, getDoc } from 'firebase/firestore';
-import { StyleSheet, TouchableOpacity, Image } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  Text,
+  ScrollView,
+  Modal,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
+import {auth, db} from '../../firebase/firebase';
+import {doc, getDoc} from 'firebase/firestore';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as ImagePicker from 'react-native-image-picker';
-import {db} from '../../firebase/firebase'; // تأكد من مسار ملف الإعدادات الخاص بك
 import AppHeader from '../../Components/Header';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Constant from '../../constants/Constant';
+import {hp, wp} from '../../constants/Dimensions';
 
-const ProfileScreen = ({ navigation }) => {
+const ProfileScreen = ({navigation}) => {
   const [userData, setUserData] = useState(null);
-  const [profileImage, setProfileImage] = useState('https://via.placeholder.com/150');
+  const [userToken, SetUserToken] = useState(null);
+  const [profileImage, setProfileImage] = useState(
+    'https://via.placeholder.com/150',
+  );
+  const [modalVisible, setModalVisible] = useState(false); // Modal visibility state
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -40,8 +51,9 @@ const ProfileScreen = ({ navigation }) => {
     AsyncStorage.clear();
     navigation.navigate('Login');
   };
+
   const handleImageChange = () => {
-    ImagePicker.launchImageLibrary({}, (response) => {
+    ImagePicker.launchImageLibrary({}, response => {
       if (response.assets) {
         setProfileImage(response.assets[0].uri);
       }
@@ -49,54 +61,126 @@ const ProfileScreen = ({ navigation }) => {
   };
 
   const handleLogout = () => {
-    Alert.alert('Logout', 'Are you sure you want to log out?', [
-      {text: 'Cancel', style: 'cancel'},
-      {text: 'Log Out', onPress: () => Logout()},
-    ]);
+    setModalVisible(true); // Open the modal
+  };
+
+  const confirmLogout = () => {
+    setModalVisible(false); // Close the modal
+    Logout(); // Perform logout
   };
 
   const renderOption = (iconName, text, onPress) => (
     <TouchableOpacity style={styles.option} onPress={onPress}>
       <View style={styles.iconContainer}>
-        <Icon name={iconName} size={24} color="#ffa500" style={styles.icon} />
+        <Icon name={iconName} size={20} color="#ffa500" style={styles.icon} />
       </View>
       <Text style={styles.optionText}>{text}</Text>
-      <Icon name="chevron-right" size={24} color="#ffa500" style={styles.arrowIcon} />
+      <Icon name="chevron-right" size={15} style={styles.arrowIcon} />
     </TouchableOpacity>
   );
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const value = await AsyncStorage.getItem('userToken');
+        if (value !== null) {
+          SetUserToken(value);
+          console.log('usertoken22222', value);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    };
 
+    fetchData();
+  }, []);
   return (
-    <View style={styles.container}>
-      {/* Custom Header */}
-      <View style={styles.customHeader}>
-        <Text style={styles.headerText}>Profile</Text>
-      </View>
-
-      {/* Profile Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={handleImageChange} style={styles.imageWrapper}>
-          <View style={styles.outerCircle}>
-            <View style={styles.innerCircle}>
-              <Image
-                source={{ uri: profileImage }}
-                style={styles.profileImage}
-              />
+    <>
+      <AppHeader title={userData?.name} />
+      {userToken === null ? (
+        <View style={styles.center}>
+          <Text style={styles.Text}>Please Login to view your cart</Text>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.replace('Login');
+            }}
+            style={styles.btn}>
+            <Text style={styles.textbtn}>Login</Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <>
+          <View style={styles.container}>
+            {/* Profile Header */}
+            <View style={styles.header}>
+              <TouchableOpacity
+                onPress={handleImageChange}
+                style={styles.imageWrapper}>
+                <View style={styles.outerCircle}>
+                  <View style={styles.innerCircle}>
+                    <Image
+                      source={{uri: profileImage}}
+                      style={styles.profileImage}
+                    />
+                  </View>
+                </View>
+              </TouchableOpacity>
+              <Text style={styles.name}>{userData?.name || 'Loading...'}</Text>
+              <Text style={styles.email}>
+                {userData?.email || 'Loading...'}
+              </Text>
             </View>
-          </View>
-        </TouchableOpacity>
-        <Text style={styles.name}>{userData?.name || 'Loading...'}</Text>
-        <Text style={styles.email}>{userData?.email || 'Loading...'}</Text>
-      </View>
 
-      {/* Profile Options */}
-      <ScrollView style={styles.optionsContainer}>
-        {renderOption('history', 'Order History', () => navigation.navigate('OrderHistory'))}
-        {renderOption('map-marker', 'Shipping Address', () => navigation.navigate('ShippingAddress'))}
-        {renderOption('envelope', 'Create Request', () => navigation.navigate('CreateRequest'))}
-        {renderOption('user-secret', 'Privacy Policy', () => navigation.navigate('PrivacyPolicy'))}
-        {renderOption('sign-out', 'Log Out', handleLogout)}
-      </ScrollView>
-    </View>
+            {/* Profile Options */}
+            <ScrollView style={styles.optionsContainer}>
+              {renderOption('history', 'Order History', () =>
+                navigation.navigate('Orders'),
+              )}
+              {renderOption('map-marker', 'Shipping Address', () =>
+                navigation.navigate('ShippingAddress'),
+              )}
+              {renderOption('envelope', 'Create Request', () =>
+                navigation.navigate('CreateRequest'),
+              )}
+              {renderOption('user-secret', 'Privacy Policy', () =>
+                navigation.navigate('PrivacyPolicy'),
+              )}
+              {renderOption('group', 'About us', () =>
+                navigation.navigate('About'),
+              )}
+              {renderOption('sign-out', 'Log Out', handleLogout)}
+            </ScrollView>
+
+            {/* Logout Confirmation Modal */}
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={modalVisible}
+              onRequestClose={() => setModalVisible(false)}>
+              <View style={styles.modalContainer}>
+                <View style={styles.modalContent}>
+                  <Text style={styles.modalTitle}>Logout</Text>
+                  <Text style={styles.modalMessage}>
+                    Are you sure you want to log out?
+                  </Text>
+                  <View style={styles.modalButtons}>
+                    <TouchableOpacity
+                      style={styles.cancelButton}
+                      onPress={() => setModalVisible(false)}>
+                      <Text style={styles.cancelButtonText}>Cancel</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.confirmButton}
+                      onPress={confirmLogout}>
+                      <Text style={styles.confirmButtonText}>Log Out</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+            </Modal>
+          </View>
+        </>
+      )}
+    </>
   );
 };
 
@@ -105,17 +189,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f9f9f9',
     padding: 20,
-  },
-  customHeader: {
-    paddingVertical: 15,
-    backgroundColor: '#fff', // Background color is now white
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  headerText: {
-    fontSize: 24,
-    color: '#AE6B77', // Text color is now the previous background color
-    fontWeight: 'bold',
   },
   header: {
     alignItems: 'center',
@@ -152,7 +225,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 10,
     color: '#666',
-    
   },
   email: {
     fontSize: 16,
@@ -187,6 +259,83 @@ const styles = StyleSheet.create({
   arrowIcon: {
     marginRight: 10,
     color: '#AE6B77',
+  },
+  // Modal styles
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+  },
+  modalContent: {
+    width: 300,
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: '#AE6B77',
+  },
+  modalMessage: {
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  cancelButton: {
+    flex: 1,
+    alignItems: 'center',
+    padding: 10,
+    backgroundColor: '#E8E1DA',
+    borderRadius: 5,
+    marginRight: 10,
+  },
+  confirmButton: {
+    flex: 1,
+    alignItems: 'center',
+    padding: 10,
+    backgroundColor: '#AE6B77',
+    borderRadius: 5,
+  },
+  cancelButtonText: {
+    color: '#666',
+    fontSize: 16,
+  },
+  confirmButtonText: {
+    color: '#fff',
+    fontSize: 16,
+  },
+  Text: {
+    color: Constant.colors['deep-burgundy'],
+    fontWeight: '500',
+    textAlign: 'center',
+  },
+  center: {
+    justifyContent: 'center',
+    flex: 1,
+    padding: wp(4),
+  },
+  btn: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: wp(3.2),
+    backgroundColor: Constant.colors['deep-burgundy'],
+    borderRadius: wp(2),
+    marginTop: hp(2),
+  },
+  textbtn: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: hp(2),
   },
 });
 

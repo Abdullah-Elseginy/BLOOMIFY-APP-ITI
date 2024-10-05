@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
-import { View, TextInput, StyleSheet } from 'react-native';
+import React, {useState} from 'react';
+import {View, TextInput, StyleSheet} from 'react-native';
+import Constant from '../constants/Constant';
+import {wp} from '../constants/Dimensions';
 
-const SearchBar = ({ products, setFilteredProducts }) => {
+const SearchBar = ({products, setFilteredProducts}) => {
   const [searchQuery, setSearchQuery] = useState('');
 
-  const handleSearch = (query) => {
+  const handleSearch = query => {
     setSearchQuery(query);
     const filtered = products.filter(product =>
-      product.name.toLowerCase().includes(query.toLowerCase())
+      product.name.toLowerCase().includes(query.toLowerCase()),
     );
     setFilteredProducts(filtered);
   };
@@ -16,6 +18,7 @@ const SearchBar = ({ products, setFilteredProducts }) => {
     <View style={styles.searchContainer}>
       <TextInput
         placeholder="Search products..."
+        placeholderTextColor={Constant.colors['deep-burgundy']}
         value={searchQuery}
         onChangeText={handleSearch}
         style={styles.searchInput}
@@ -26,14 +29,16 @@ const SearchBar = ({ products, setFilteredProducts }) => {
 
 const styles = StyleSheet.create({
   searchContainer: {
-    margin: 10,
-    padding: 5,
+    margin: 5,
+    // padding: 5,
     borderRadius: 10,
-    backgroundColor: '#f0f0f0',
+    borderColor: Constant.colors['light-pink'],
+    borderWidth: wp(0.3),
   },
   searchInput: {
     height: 40,
-    paddingLeft: 10,
+    paddingHorizontal: 12,
+    color: Constant.colors['dark-brownish'],
   },
 });
 

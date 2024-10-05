@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
-import {View, ActivityIndicator} from 'react-native';
+import {View, ActivityIndicator, Image} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -14,6 +14,9 @@ import CartScreen from '../screens/CartScreen';
 import CheckOut from '../screens/CheckOut';
 import Orders from '../screens/Orders';
 import Constant from '../constants/Constant';
+import About from '../screens/AboutUs/aboutUs';
+import IMAGES from '../constants/Images';
+import {hp, wp} from '../constants/Dimensions';
 
 const Stack = createNativeStackNavigator();
 
@@ -29,7 +32,9 @@ const MainStack = () => {
       } catch (e) {
         console.error('Failed to load token:', e);
       }
-      setLoading(false); // Set loading to false once token is checked
+      setTimeout(() => {
+        setLoading(false); // Set loading to false once token is checked
+      }, 2000);
     };
 
     checkUserToken();
@@ -42,9 +47,15 @@ const MainStack = () => {
           flex: 1,
           justifyContent: 'center',
           alignItems: 'center',
-          backgroundColor: Constant.colors['deep-burgundy'],
+          backgroundColor: Constant.colors['light-pink'],
         }}>
-        <ActivityIndicator size="large" color={Constant.colors['light-pink']} />
+        <Image
+          source={IMAGES.BLoomyLogo}
+          style={{
+            width: wp(30),
+            height: hp(15),
+          }}
+        />
       </View>
     );
   }
@@ -65,6 +76,7 @@ const MainStack = () => {
         <Stack.Screen name="cartScreen" component={CartScreen} />
         <Stack.Screen name="CheckOut" component={CheckOut} />
         <Stack.Screen name="Orders" component={Orders} />
+        <Stack.Screen name="About" component={About} />
       </Stack.Navigator>
     </NavigationContainer>
   );

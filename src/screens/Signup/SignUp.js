@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   TextInput,
@@ -10,6 +10,7 @@ import {
   StyleSheet,
   Alert,
   ActivityIndicator,
+  Modal,
 } from 'react-native';
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
@@ -26,7 +27,12 @@ export default function Register({navigation}) {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const phoneRegExp = /^(010|011|012|015)\d{8}$/;
-
+  const [modaVisible, setModalVisible] = useState(false);
+  useEffect(() => {
+    if (error) {
+      setModalVisible(true);
+    }
+  }, [error]);
   // Form Validation Schema using Yup
   const validationSchema = Yup.object({
     name: Yup.string()
@@ -86,10 +92,6 @@ export default function Register({navigation}) {
         // eslint-disable-next-line no-catch-shadow
       } catch (error) {
         setError(error.message || 'Registration failed. Please try again.');
-        Alert.alert(
-          'Register Failed',
-          'Please check your credentials and try again.',
-        );
         // console.error('Error creating user:', error);
       } finally {
         setIsLoading(false);
@@ -125,9 +127,25 @@ export default function Register({navigation}) {
           </Text>
 
           {error && (
-            <Text style={{color: '#d31e1e', width: wp(80)}}>
-              Please try again , this account is used before
-            </Text>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={modaVisible}
+              onRequestClose={() => setModalVisible(false)}>
+              <View style={styles.modalContainer}>
+                <View style={styles.modalContent}>
+                  <Text style={styles.modalTitle}>Error</Text>
+                  <Text style={styles.modalMessage}>{error}</Text>
+                  <View style={styles.modalButtons}>
+                    <TouchableOpacity
+                      style={styles.cancelButton}
+                      onPress={() => setModalVisible(false)}>
+                      <Text style={styles.cancelButtonText}>Cancel</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+            </Modal>
           )}
           <Text
             style={{
@@ -316,5 +334,47 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: wp(4),
     fontWeight: 'bold',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+  },
+  modalContent: {
+    width: 300,
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: '#960808',
+  },
+  modalMessage: {
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  cancelButton: {
+    flex: 1,
+    alignItems: 'center',
+    padding: 10,
+    backgroundColor: '#E8E1DA',
+    borderRadius: 5,
+    marginRight: 10,
+  },
+  cancelButtonText: {
+    color: '#666',
+    fontSize: 16,
   },
 });

@@ -18,7 +18,6 @@ import {
   setDoc,
   getDoc,
 } from 'firebase/firestore';
-import { getAuth } from 'firebase/auth';
 import { db, auth } from '../../firebase/firebase';
 import { styles } from './styles';
 import AppHeader from '../../Components/Header';
