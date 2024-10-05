@@ -155,10 +155,10 @@ const HomeScreen = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const value = await AsyncStorage.getItem('userToken');
+        const value = await AsyncStorage.getItem('userId');
         if (value !== null) {
           setStoredData(value);
-          console.log('usertoken', value);
+          console.log('userId', value);
         }
       } catch (e) {
         console.error(e);

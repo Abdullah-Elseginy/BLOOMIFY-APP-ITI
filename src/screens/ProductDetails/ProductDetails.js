@@ -4,7 +4,7 @@ import { useRoute } from '@react-navigation/native'
 import { db } from '../../firebase/firebase';
 import { collection, getDoc, doc, onSnapshot, setDoc } from 'firebase/firestore';
 import { styles } from './styles';
-import { FlatList, ScrollView } from 'react-native-gesture-handler';
+import { FlatList, ScrollView, TextInput } from 'react-native-gesture-handler';
 import { Image } from 'react-native';
 import { hp } from '../../constants/Dimensions';
 import Constant from '../../constants/Constant';
@@ -25,7 +25,6 @@ export default function ProductDetails() {
     const auth = getAuth();
     const user = auth.currentUser;
     const userId = user ? user.uid : null;
-
 
 
     const dispatch = useDispatch();
@@ -69,7 +68,7 @@ export default function ProductDetails() {
 
 
     const addCart = (item) => {
-        dispatch(addToCart(item)); 
+        dispatch(addToCart(item));
         toast.show({ type: 'success', text1: `${item.name} added to cart ` });
     };
 
@@ -112,84 +111,153 @@ export default function ProductDetails() {
         }
     }, [dispatch, userId]);
 
+    // Add review section 
+    const [userData, setUserData] = useState({});
+    const [userRating, setUserRating] = useState();
+    const [userComment, setUserComment] = useState();
+
+
+    useEffect(() => {
+        const getUserData = async () => {
+            try {
+                const Data = await getDoc(doc(db, "users", userId));
+                const uData = Data.data();
+                setUserData(uData);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        getUserData();
+    }, [userId]);
+
+    async function setReview() {
+        if (!userRating || !userComment) {
+            console.log("Rating and comment are required.");
+            return;
+        }
+        const rating = parseFloat(userRating);
+        try {
+            const reviewsCollectionRef = collection(doc(db, 'products', params), 'reviews');
+            await setDoc(doc(reviewsCollectionRef), {
+                rating: rating,
+                comment: userComment,
+                userName: userData.name,
+                userId: userId,
+            });
+            clearInput();
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    function clearInput() {
+        setUserRating('');
+        setUserComment('');
+    }
+
+    // end of add review
 
     return (
         <>
-        <AppHeader title={product.name} arrowBack={true}/>
-        <View style={styles.container} key={product.id}>
-            {loading || !product.image ? (
-                <View style={styles.activity}>
-                    <ActivityIndicator size="large" color="#AE6B77" />
-                </View>) : (
-                <>
-                    <ScrollView>
-                        <View style={styles.imgContainer} >
-                            <Image source={{ uri: product.image }} style={styles.img} />
-                        </View>
-                        <View style={styles.body}>
-                            <Text style={styles.name}>{product.name}</Text>
-                            <View style={styles.boxDetail}>
-                                <Text style={styles.boxText}>{product.type}</Text>
-                                <View style={{ flexDirection: 'row' }}>
-                                    <Rating
-                                        readonly
-                                        startingValue={product.rating}
-                                        imageSize={20}
-                                        fractions={1}
-                                    />
-                                    <Text style={[styles.boxText, { color: Constant.colors['pale-grayish'] }]}>{product.rating.toFixed(1)}</Text>
-                                </View>
+            <AppHeader title={product.name} arrowBack={true} />
+            <View style={styles.container} key={product.id}>
+                {loading || !product.image ? (
+                    <View style={styles.activity}>
+                        <ActivityIndicator size="large" color="#AE6B77" />
+                    </View>) : (
+                    <>
+                        <ScrollView>
+                            <View style={styles.imgContainer} >
+                                <Image source={{ uri: product.image }} style={styles.img} />
                             </View>
-                            <View style={styles.boxDetail}>
-                                <Text style={styles.boxText}>Color : {product.colour}</Text>
-                                <Text style={[styles.boxText, { fontWeight: '700' }]}>{product.price} EGP</Text>
-                            </View>
-                            <View style={styles.sections}>
-                                <Text style={styles.title}>Occasion</Text>
-                                <Text style={styles.boxText}>{product.category}</Text>
-                            </View>
-                            <View style={styles.sections}>
-                                <Text style={styles.title}>Flower Country</Text>
-                                <Text style={styles.boxText}>{product.country}</Text>
-                            </View>
-                            <View style={styles.sections}>
-                                <Text style={styles.title}>Description</Text>
-                                <Text style={[styles.boxText, { lineHeight: 20 }]}>{product.description}</Text>
-                            </View>
-
-                            {/* <TouchableOpacity activeOpacity={0.7} style={styles.addButton}>
-                                <Text style={styles.addButtonText}>Add to Cart</Text>
-                            </TouchableOpacity> */}
-                            <TouchableOpacity style={[styles.addButton,isInCart && { opacity: 0.5 }]} key={product.id}
-                            onPress={() => !isInCart && addCart(product)} 
-                            activeOpacity={isInCart ? 1 : 0.7} >
-                            <Text style={styles.addButtonText}>
-                            {isInCart ? 'Added to Cart' : 'Add to Cart'}
-                            </Text>
-                            </TouchableOpacity>
-
-                            <View style={styles.comment}>
-                                <Text style={styles.title}>Reviews</Text>
-                                {reviews.map((item) => <View key={item.id} style={styles.commentContainer}>
-                                    <Image style={styles.commentImg} source={require('../../assets/images/profile.jpg')} />
-                                    <View style={styles.commentDetails}>
-                                        <Text style={[styles.boxText, { fontWeight: '700', fontSize: 16 }]}>{item.userName}</Text>
+                            <View style={styles.body}>
+                                <Text style={styles.name}>{product.name}</Text>
+                                <View style={styles.boxDetail}>
+                                    <Text style={styles.boxText}>{product.type}</Text>
+                                    <View style={{ flexDirection: 'row' }}>
                                         <Rating
                                             readonly
-                                            startingValue={item.rating}
-                                            imageSize={15}
+                                            startingValue={product.rating || 0}  // Ensure default value for Rating
+                                            imageSize={20}
                                             fractions={1}
                                         />
-                                        <Text style={[styles.boxText, { color: Constant.colors['light-brownish-gray'] }]}>{item.comment}</Text>
+                                        <Text style={[styles.boxText, { color: Constant.colors['pale-grayish'] }]}>
+                                            {product.rating ? product.rating.toFixed(1) : "No rating"}
+                                        </Text>
                                     </View>
-                                </View>)}
-                            </View>
-                        </View>
-                    </ScrollView>
+                                </View>
+                                <View style={styles.boxDetail}>
+                                    <Text style={styles.boxText}>Color : {product.colour}</Text>
+                                    <Text style={[styles.boxText, { fontWeight: '700' }]}>{product.price} EGP</Text>
+                                </View>
+                                <View style={styles.sections}>
+                                    <Text style={styles.title}>Occasion</Text>
+                                    <Text style={styles.boxText}>{product.category}</Text>
+                                </View>
+                                <View style={styles.sections}>
+                                    <Text style={styles.title}>Flower Country</Text>
+                                    <Text style={styles.boxText}>{product.country}</Text>
+                                </View>
+                                <View style={styles.sections}>
+                                    <Text style={styles.title}>Description</Text>
+                                    <Text style={[styles.boxText, { lineHeight: 20 }]}>{product.description}</Text>
+                                </View>
 
-                </>)
-            }
-        </View>
+                                {/* <TouchableOpacity activeOpacity={0.7} style={styles.addButton}>
+                                <Text style={styles.addButtonText}>Add to Cart</Text>
+                            </TouchableOpacity> */}
+                                <TouchableOpacity style={[styles.addButton, isInCart && { opacity: 0.5 }]} key={product.id}
+                                    onPress={() => !isInCart && addCart(product)}
+                                    activeOpacity={isInCart ? 1 : 0.7} >
+                                    <Text style={styles.addButtonText}>
+                                        {isInCart ? 'Added to Cart' : 'Add to Cart'}
+                                    </Text>
+                                </TouchableOpacity>
+                                {/* users reviews */}
+                                <View style={styles.comment}>
+                                    <Text style={styles.title}>Reviews</Text>
+                                    {reviews.map((item, index) => <View key={item.id || index} style={styles.commentContainer}>
+                                        <Image style={styles.commentImg} source={require('../../assets/images/profile.jpg')} />
+                                        <View style={styles.commentDetails}>
+                                            <Text style={[styles.boxText, { fontWeight: '700', fontSize: 16 }]}>{item.userName}</Text>
+                                            <Rating
+                                                readonly
+                                                startingValue={item.rating}
+                                                imageSize={15}
+                                                fractions={1}
+                                            />
+                                            <Text style={[styles.boxText, { color: Constant.colors['light-brownish-gray'] }]}>{item.comment}</Text>
+                                        </View>
+                                    </View>)}
+                                </View>
+                                {/* add review */}
+                                <View style={styles.comment}>
+                                    <Text style={styles.title}>Add Review</Text>
+                                    <TextInput
+                                        placeholder='rate from 0.0 to 5.0'
+                                        placeholderTextColor={Constant.colors.gray}
+                                        keyboardType="number-pad"
+                                        style={styles.input}
+                                        onChangeText={(e) => setUserRating(e)}
+                                        value={userRating}
+                                    />
+                                    <TextInput
+                                        style={[styles.input, { height: hp(7) }]}
+                                        placeholder='your review...'
+                                        placeholderTextColor={Constant.colors.gray}
+                                        onChangeText={(e) => setUserComment(e)}
+                                        value={userComment}
+
+                                    />
+                                    <TouchableOpacity activeOpacity={0.7} style={styles.addButton} onPress={() => setReview()}>
+                                        <Text style={styles.addButtonText}>Add my Review</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </ScrollView>
+
+                    </>)
+                }
+            </View>
         </>
     )
 }

@@ -95,8 +95,8 @@ const ProfileScreen = ({navigation}) => {
           {renderOption('location-on', 'Shipping Address', () =>
             navigation.navigate('ShippingAddress'),
           )}
-          {renderOption('support-agent', 'Create Request', () =>
-            navigation.navigate('CreateRequest'),
+          {renderOption('support-agent', 'Contact US', () =>
+            navigation.navigate('contactUs'),
           )}
           {renderOption('policy', 'Privacy Policy', () =>
             navigation.navigate('PrivacyPolicy'),
