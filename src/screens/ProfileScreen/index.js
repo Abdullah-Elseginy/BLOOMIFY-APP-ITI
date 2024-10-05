@@ -1,37 +1,35 @@
 
 
-import React, {useState, useEffect} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  Alert,
-} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import React, { useEffect, useState } from 'react';
+import { View, Text, Alert,ScrollView } from 'react-native';
+import { auth, db } from '../../firebase/firebase';
+import { doc, getDoc } from 'firebase/firestore';
+import { StyleSheet, TouchableOpacity, Image } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import * as ImagePicker from 'react-native-image-picker';
 import {db} from '../../firebase/firebase'; // تأكد من مسار ملف الإعدادات الخاص بك
 import AppHeader from '../../Components/Header';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const ProfileScreen = ({navigation}) => {
-  const [profileImage, setProfileImage] = useState(
-    'https://via.placeholder.com/150',
-  );
-  const [userData, setUserData] = useState({name: '', email: ''});
+const ProfileScreen = ({ navigation }) => {
+  const [userData, setUserData] = useState(null);
+  const [profileImage, setProfileImage] = useState('https://via.placeholder.com/150');
 
   useEffect(() => {
     const fetchUserData = async () => {
-      try {
-        // استبدل "user-id" بمعرف المستخدم الصحيح
-        const userDoc = await db.collection('users').doc('user-id').get();
-        if (userDoc.exists) {
-          const user = userDoc.data();
-          setUserData({name: user.name, email: user.email});
+      const currentUser = auth.currentUser;
+
+      if (currentUser) {
+        const userUid = currentUser.uid;
+        const userDocRef = doc(db, 'users', userUid);
+        const userDoc = await getDoc(userDocRef);
+
+        if (userDoc.exists()) {
+          setUserData(userDoc.data());
+        } else {
+          console.log('No such document!');
         }
-      } catch (error) {
-        console.log('Error fetching user data:', error);
+      } else {
+        console.log('No user is logged in');
       }
     };
 
@@ -43,7 +41,7 @@ const ProfileScreen = ({navigation}) => {
     navigation.navigate('Login');
   };
   const handleImageChange = () => {
-    ImagePicker.launchImageLibrary({}, response => {
+    ImagePicker.launchImageLibrary({}, (response) => {
       if (response.assets) {
         setProfileImage(response.assets[0].uri);
       }
@@ -63,55 +61,42 @@ const ProfileScreen = ({navigation}) => {
         <Icon name={iconName} size={24} color="#ffa500" style={styles.icon} />
       </View>
       <Text style={styles.optionText}>{text}</Text>
-      <Icon
-        name="chevron-right"
-        size={24}
-        color="#ffa500"
-        style={styles.arrowIcon}
-      />
+      <Icon name="chevron-right" size={24} color="#ffa500" style={styles.arrowIcon} />
     </TouchableOpacity>
   );
 
   return (
-    <>
-      <AppHeader title={`Welcome ${userData.name}`} />
-      <View style={styles.container}>
-        {/* Profile Header */}
-        <View style={styles.header}>
-          <TouchableOpacity
-            onPress={handleImageChange}
-            style={styles.imageWrapper}>
-            <View style={styles.outerCircle}>
-              <View style={styles.innerCircle}>
-                <Image
-                  source={{uri: profileImage}}
-                  style={styles.profileImage}
-                />
-              </View>
-            </View>
-          </TouchableOpacity>
-          <Text style={styles.name}>{userData.name || 'Loading...'}</Text>
-          <Text style={styles.email}>{userData.email || 'Loading...'}</Text>
-        </View>
-
-        {/* Profile Options */}
-        <View style={styles.optionsContainer}>
-          {renderOption('history', 'Order History', () =>
-            navigation.navigate('Orders'),
-          )}
-          {renderOption('location-on', 'Shipping Address', () =>
-            navigation.navigate('ShippingAddress'),
-          )}
-          {renderOption('support-agent', 'Create Request', () =>
-            navigation.navigate('CreateRequest'),
-          )}
-          {renderOption('policy', 'Privacy Policy', () =>
-            navigation.navigate('PrivacyPolicy'),
-          )}
-          {renderOption('logout', 'Log Out', handleLogout)}
-        </View>
+    <View style={styles.container}>
+      {/* Custom Header */}
+      <View style={styles.customHeader}>
+        <Text style={styles.headerText}>Profile</Text>
       </View>
-    </>
+
+      {/* Profile Header */}
+      <View style={styles.header}>
+        <TouchableOpacity onPress={handleImageChange} style={styles.imageWrapper}>
+          <View style={styles.outerCircle}>
+            <View style={styles.innerCircle}>
+              <Image
+                source={{ uri: profileImage }}
+                style={styles.profileImage}
+              />
+            </View>
+          </View>
+        </TouchableOpacity>
+        <Text style={styles.name}>{userData?.name || 'Loading...'}</Text>
+        <Text style={styles.email}>{userData?.email || 'Loading...'}</Text>
+      </View>
+
+      {/* Profile Options */}
+      <ScrollView style={styles.optionsContainer}>
+        {renderOption('history', 'Order History', () => navigation.navigate('OrderHistory'))}
+        {renderOption('map-marker', 'Shipping Address', () => navigation.navigate('ShippingAddress'))}
+        {renderOption('envelope', 'Create Request', () => navigation.navigate('CreateRequest'))}
+        {renderOption('user-secret', 'Privacy Policy', () => navigation.navigate('PrivacyPolicy'))}
+        {renderOption('sign-out', 'Log Out', handleLogout)}
+      </ScrollView>
+    </View>
   );
 };
 
@@ -120,6 +105,17 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f9f9f9',
     padding: 20,
+  },
+  customHeader: {
+    paddingVertical: 15,
+    backgroundColor: '#fff', // Background color is now white
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  headerText: {
+    fontSize: 24,
+    color: '#AE6B77', // Text color is now the previous background color
+    fontWeight: 'bold',
   },
   header: {
     alignItems: 'center',
@@ -154,8 +150,9 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#666',
     marginTop: 10,
+    color: '#666',
+    
   },
   email: {
     fontSize: 16,
@@ -173,7 +170,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: 'rgba(174, 107, 119,0.2)', // Transparent orange circle
+    backgroundColor: 'rgba(174, 107, 119,0.2)',
     justifyContent: 'center',
     alignItems: 'center',
   },
