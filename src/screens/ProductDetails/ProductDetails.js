@@ -181,8 +181,8 @@ export default function ProductDetails() {
 
                 <View style={styles.comment}>
                   <Text style={styles.title}>Reviews</Text>
-                  {reviews.map(item => (
-                    <View key={item.id} style={styles.commentContainer}>
+                  {reviews.map((item,index) => (
+                    <View key={item.id || index} style={styles.commentContainer}>
                       <Image
                         style={styles.commentImg}
                         source={require('../../assets/images/profile.jpg')}

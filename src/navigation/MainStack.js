@@ -17,6 +17,8 @@ import Constant from '../constants/Constant';
 import About from '../screens/AboutUs/aboutUs';
 import IMAGES from '../constants/Images';
 import {hp, wp} from '../constants/Dimensions';
+import ContactUs from '../screens/ContactUs/ContactUs';
+import Review from '../screens/Review/Review';
 
 const Stack = createNativeStackNavigator();
 
@@ -77,6 +79,8 @@ const MainStack = () => {
         <Stack.Screen name="CheckOut" component={CheckOut} />
         <Stack.Screen name="Orders" component={Orders} />
         <Stack.Screen name="About" component={About} />
+        <Stack.Screen name="contactUs" component={ContactUs} />
+        <Stack.Screen name="review" component={Review} />
       </Stack.Navigator>
     </NavigationContainer>
   );

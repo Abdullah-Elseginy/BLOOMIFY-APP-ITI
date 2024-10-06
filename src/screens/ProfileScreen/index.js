@@ -137,8 +137,8 @@ const ProfileScreen = ({navigation}) => {
               {renderOption('map-marker', 'Shipping Address', () =>
                 navigation.navigate('ShippingAddress'),
               )}
-              {renderOption('envelope', 'Create Request', () =>
-                navigation.navigate('CreateRequest'),
+              {renderOption('envelope', 'Contact Us', () =>
+                navigation.navigate('contactUs'),
               )}
               {renderOption('user-secret', 'Privacy Policy', () =>
                 navigation.navigate('PrivacyPolicy'),

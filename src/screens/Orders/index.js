@@ -11,6 +11,7 @@ import {
   FlatList,
   ActivityIndicator,
   StyleSheet,
+  TouchableOpacity,
 } from 'react-native';
 import {collection, doc, getDocs} from 'firebase/firestore';
 import {auth, db} from '../../firebase/firebase';
@@ -18,9 +19,11 @@ import AppHeader from '../../Components/Header';
 import Constant from '../../constants/Constant';
 import {hp, wp} from '../../constants/Dimensions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 
 // Orders Component
 const Orders = () => {
+  const {navigate} = useNavigation();
   const user = auth.currentUser;
   const userId = user ? user.uid : null;
   const [ordersData, setOrdersData] = useState([]);
@@ -104,7 +107,7 @@ const Orders = () => {
                   data={item.cartItems}
                   keyExtractor={(item, itemIndex) => itemIndex.toString()}
                   renderItem={({item}) => (
-                    <View style={styles.itemContainer}>
+                    <TouchableOpacity style={styles.itemContainer} activeOpacity={0.7} onPress={() => navigate('review', item.id)}>
                       <Image
                         source={{uri: item?.image}}
                         style={styles.itemImage}
@@ -116,7 +119,7 @@ const Orders = () => {
                         </Text>
                         <Text style={styles.itemPrice}>{item?.price} EGP</Text>
                       </View>
-                    </View>
+                    </TouchableOpacity>
                   )}
                   contentContainerStyle={styles.listContent}
                 />
