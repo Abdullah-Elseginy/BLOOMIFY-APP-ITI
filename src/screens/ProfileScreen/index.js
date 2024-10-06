@@ -135,13 +135,13 @@ const ProfileScreen = ({navigation}) => {
                 navigation.navigate('Orders'),
               )}
               {renderOption('map-marker', 'Shipping Address', () =>
-                navigation.navigate('ShippingAddress'),
+                navigation.navigate('BottomTabs'),
               )}
               {renderOption('envelope', 'Contact Us', () =>
                 navigation.navigate('contactUs'),
               )}
               {renderOption('user-secret', 'Privacy Policy', () =>
-                navigation.navigate('PrivacyPolicy'),
+                navigation.navigate('BottomTabs'),
               )}
               {renderOption('group', 'About us', () =>
                 navigation.navigate('About'),
