@@ -183,7 +183,6 @@ const BottomTabNavigator = () => {
       <Tab.Screen name={'Home'} component={HomeScreen} />
       <Tab.Screen name={'Shop'} component={Shop} />
       <Tab.Screen name={'cart'} component={CartScreen} />
-
       <Tab.Screen name={'Profile'} component={Profile} />
     </Tab.Navigator>
   );
