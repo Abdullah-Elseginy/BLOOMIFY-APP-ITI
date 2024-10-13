@@ -1,7 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useRef, useState} from 'react';
-import {FlatList, Image, Text, View, ScrollView} from 'react-native';
+import {
+  FlatList,
+  Image,
+  Text,
+  View,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 
 import {wp} from '../../constants/Dimensions';
 import IMAGES from '../../constants/Images';
@@ -150,23 +157,6 @@ const HomeScreen = () => {
       setCurrentIndex(nextIndex);
     }
   };
-  const [storedData, setStoredData] = useState(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const value = await AsyncStorage.getItem('userToken');
-        if (value !== null) {
-          setStoredData(value);
-          console.log('usertoken', value);
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   return (
     <>
@@ -218,10 +208,10 @@ const HomeScreen = () => {
               keyExtractor={item => item.id}
               horizontal
               renderItem={({item}) => (
-                <View style={styles.categoryItem}>
+                <TouchableOpacity style={styles.categoryItem}>
                   <Image source={item.img} style={styles.categoryImage} />
                   <Text style={styles.categoryTitle}>{item.title}</Text>
-                </View>
+                </TouchableOpacity>
               )}
             />
           </View>

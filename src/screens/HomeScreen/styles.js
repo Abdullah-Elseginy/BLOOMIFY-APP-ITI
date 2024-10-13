@@ -115,6 +115,7 @@ export const styles = StyleSheet.create({
   recommendedImage: {
     width: wp(60),
     height: hp(18),
+    borderRadius: wp(2),
   },
   recommendedTitle: {
     fontSize: 18,

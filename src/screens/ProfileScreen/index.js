@@ -96,7 +96,7 @@ const ProfileScreen = ({navigation}) => {
   }, []);
   return (
     <>
-      <AppHeader title={'Welcome ' + userData?.name} />
+      <AppHeader title={'Welcome ' + userData?.name || ''} />
       {userToken === null ? (
         <View style={styles.center}>
           <Text style={styles.Text}>Please Login have a profile</Text>
@@ -134,14 +134,11 @@ const ProfileScreen = ({navigation}) => {
               {renderOption('history', 'Order History', () =>
                 navigation.navigate('Orders'),
               )}
-              {renderOption('map-marker', 'Shipping Address', () =>
-                navigation.navigate('BottomTabs'),
-              )}
               {renderOption('envelope', 'Contact Us', () =>
                 navigation.navigate('contactUs'),
               )}
               {renderOption('user-secret', 'Privacy Policy', () =>
-                navigation.navigate('BottomTabs'),
+                navigation.navigate('PrivacyPolicy'),
               )}
               {renderOption('group', 'About us', () =>
                 navigation.navigate('About'),
