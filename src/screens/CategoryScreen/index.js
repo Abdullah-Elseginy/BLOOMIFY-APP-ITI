@@ -1,7 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, Image, ActivityIndicator, RefreshControl, StyleSheet,TouchableOpacity } from 'react-native';
-import { db,auth } from '../../firebase/firebase'; // Import db correctly
-import { collection, query, where, getDocs, limit } from 'firebase/firestore';
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  Text,
+  FlatList,
+  Image,
+  ActivityIndicator,
+  RefreshControl,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
+import {db, auth} from '../../firebase/firebase'; // Import db correctly
+import {collection, query, where, getDocs, limit} from 'firebase/firestore';
 import AppHeader from '../../Components/Header';
 import {hp, wp} from '../../constants/Dimensions';
 import Constant from '../../constants/Constant';
@@ -10,8 +19,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import toast from 'react-native-toast-message';
 
-const CategoryScreen = ({ route }) => {
-  const { category } = route.params;
+const CategoryScreen = ({route}) => {
+  const {category} = route.params;
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -22,7 +31,6 @@ const CategoryScreen = ({ route }) => {
   const userId = user ? user.uid : null;
 
   const {navigate} = useNavigation();
-
 
   const dispatch = useDispatch();
   const cartItems = useSelector(state => state.cart);
@@ -43,7 +51,7 @@ const CategoryScreen = ({ route }) => {
       const productQuery = query(
         collection(db, 'products'),
         where('category', '==', category),
-        limit(10) // Limit to 10 products
+        limit(10), // Limit to 10 products
       );
       const querySnapShot = await getDocs(productQuery);
       const productsList = querySnapShot.docs.map(doc => ({
@@ -109,7 +117,7 @@ const CategoryScreen = ({ route }) => {
 
   return (
     <>
-      <AppHeader title={'Categories'} />
+      <AppHeader title={category} arrowBack={true} />
       <View style={styles.container}>
         {loading && products.length === 0 ? (
           <View style={styles.activity}>
