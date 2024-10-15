@@ -1,20 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect, useRef, useState} from 'react';
-import {
-  FlatList,
-  Image,
-  Text,
-  View,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
-
-import {wp} from '../../constants/Dimensions';
+import React, { useEffect, useRef, useState } from 'react';
+import { FlatList, Image, Text, View, ScrollView, TouchableOpacity } from 'react-native';
+import { wp } from '../../constants/Dimensions';
 import IMAGES from '../../constants/Images';
-import {styles} from './styles';
+import { styles } from './styles';
 import AppHeader from '../../Components/Header';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native'; // إضافة
 
 const CarousalData = [
   {
@@ -50,21 +43,25 @@ const CategoryData = [
     id: '1',
     title: 'Wedding',
     img: IMAGES.Wedding,
+    category: 'Bridal Bouquet',
   },
   {
     id: '2',
     title: 'Birthday',
     img: IMAGES.Birthday,
+    category: 'birthday',
   },
   {
     id: '3',
     title: 'Graduation',
     img: IMAGES.Graduation,
+    category: 'Graduation Day',
   },
   {
     id: '4',
     title: 'Mothers day',
     img: IMAGES.Mothers,
+    category: "Mother's Day",
   },
 ];
 const BestSellerData = [
@@ -126,6 +123,7 @@ const HomeScreen = () => {
   const flatListRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isScrollingForward, setIsScrollingForward] = useState(true);
+  const navigation = useNavigation();
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -153,9 +151,32 @@ const HomeScreen = () => {
         }
       }
 
-      flatListRef.current.scrollToIndex({index: nextIndex, animated: true});
+      flatListRef.current.scrollToIndex({ index: nextIndex, animated: true });
       setCurrentIndex(nextIndex);
     }
+  };
+
+  const [storedData, setStoredData] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const value = await AsyncStorage.getItem('userToken');
+        if (value !== null) {
+          setStoredData(value);
+          console.log('usertoken', value);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+
+  const handleCategoryPress = (category) => {
+    navigation.navigate('CategoryScreen', { category });
   };
 
   return (
@@ -174,7 +195,7 @@ const HomeScreen = () => {
               horizontal
               keyExtractor={item => item.id.toString()}
               pagingEnabled
-              renderItem={({item, index}) => (
+              renderItem={({ item, index }) => (
                 <View
                   style={[
                     styles.carouselItem,
@@ -207,8 +228,11 @@ const HomeScreen = () => {
               data={CategoryData}
               keyExtractor={item => item.id}
               horizontal
-              renderItem={({item}) => (
-                <TouchableOpacity style={styles.categoryItem}>
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={styles.categoryItem}
+                  onPress={() => handleCategoryPress(item.category)}
+                >
                   <Image source={item.img} style={styles.categoryImage} />
                   <Text style={styles.categoryTitle}>{item.title}</Text>
                 </TouchableOpacity>
@@ -223,7 +247,7 @@ const HomeScreen = () => {
               data={BestSellerData}
               keyExtractor={item => item.id}
               horizontal
-              renderItem={({item, index}) => (
+              renderItem={({ item, index }) => (
                 <View style={styles.bestSellerItem}>
                   <Image source={item.img} style={styles.bestSellerImage} />
                   <Text style={styles.bestSellerTitle}>{item.title}</Text>
@@ -239,7 +263,7 @@ const HomeScreen = () => {
               data={RecommendedData}
               keyExtractor={item => item.id}
               horizontal
-              renderItem={({item, index}) => (
+              renderItem={({ item, index }) => (
                 <View style={styles.recommendedItem}>
                   <Image source={item.img} style={styles.recommendedImage} />
                   <Text style={styles.recommendedTitle}>{item.title}</Text>

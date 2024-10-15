@@ -20,6 +20,8 @@ import {hp, wp} from '../constants/Dimensions';
 import ContactUs from '../screens/ContactUs/ContactUs';
 import Review from '../screens/Review/Review';
 import Privacy from '../screens/Privacy/Privacy';
+import CategoryScreen from '../screens/CategoryScreen/index';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -83,6 +85,7 @@ const MainStack = () => {
         <Stack.Screen name="contactUs" component={ContactUs} />
         <Stack.Screen name="review" component={Review} />
         <Stack.Screen name="PrivacyPolicy" component={Privacy} />
+        <Stack.Screen name={'CategoryScreen'} component={CategoryScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
