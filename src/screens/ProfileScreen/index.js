@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
 import {
   View,
@@ -7,6 +8,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 import {auth, db} from '../../firebase/firebase';
 import {doc, getDoc} from 'firebase/firestore';
@@ -96,7 +98,7 @@ const ProfileScreen = ({navigation}) => {
   }, []);
   return (
     <>
-      <AppHeader title={'Welcome ' + userData?.name || ''} />
+      <AppHeader title={'Welcome ' + (userData?.name || '')} />
       {userToken === null ? (
         <View style={styles.center}>
           <Text style={styles.Text}>Please Login have a profile</Text>
@@ -145,37 +147,37 @@ const ProfileScreen = ({navigation}) => {
               )}
               {renderOption('sign-out', 'Log Out', handleLogout)}
             </ScrollView>
-
-            {/* Logout Confirmation Modal */}
-            <Modal
-              animationType="slide"
-              transparent={true}
-              visible={modalVisible}
-              onRequestClose={() => setModalVisible(false)}>
-              <View style={styles.modalContainer}>
-                <View style={styles.modalContent}>
-                  <Text style={styles.modalTitle}>Logout</Text>
-                  <Text style={styles.modalMessage}>
-                    Are you sure you want to log out?
-                  </Text>
-                  <View style={styles.modalButtons}>
-                    <TouchableOpacity
-                      style={styles.cancelButton}
-                      onPress={() => setModalVisible(false)}>
-                      <Text style={styles.cancelButtonText}>Cancel</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={styles.confirmButton}
-                      onPress={confirmLogout}>
-                      <Text style={styles.confirmButtonText}>Log Out</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </View>
-            </Modal>
           </View>
         </>
       )}
+
+      {/* Logout Confirmation Modal */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Logout</Text>
+            <Text style={styles.modalMessage}>
+              Are you sure you want to log out?
+            </Text>
+            <View style={styles.modalButtons}>
+              <TouchableOpacity
+                style={styles.cancelButton}
+                onPress={() => setModalVisible(false)}>
+                <Text style={styles.cancelButtonText}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.confirmButton}
+                onPress={confirmLogout}>
+                <Text style={styles.confirmButtonText}>Log Out</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </>
   );
 };
